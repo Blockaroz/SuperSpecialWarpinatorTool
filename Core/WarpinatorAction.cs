@@ -1,0 +1,71 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Utils;
+using SuperSpecialWarpinatorTool;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.UI;
+
+namespace SuperSpecialWarpinatorTool.Core;
+
+public abstract class WarpinatorAction : ILocalizedModType, ILoadable
+{
+    public string LocalizationCategory => "WarpinatorActions";
+
+    public Mod Mod { get; private set; }
+
+    public int Type { get; private set; }
+
+    public string Name => GetType().Name;
+
+    public string FullName => GetType().FullName;
+
+    public LocalizedText DisplayName { get; private set; }
+
+    public virtual string Texture => (GetType().Namespace + "." + Name).Replace('.', '/');
+
+    private protected Texture2D iconTexture;
+
+    public virtual bool HasPerformableAction => true;
+
+    public bool Selected { get; internal set; }
+
+    public List<IWarpMenuElement> Options { get; private set; }
+
+    public virtual List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>();
+
+    public void Load(Mod mod)
+    {
+        Mod = mod;
+        DisplayName = Language.GetOrRegister(Mod.GetLocalizationKey(LocalizationCategory + '.' + Name));
+        Type = SuperSpecialWarpinatorTool.actions.Count;
+        iconTexture = new TextureAsset(Texture);
+
+        SetDefaults();
+        Options = AddMenuElements();
+
+        OnLoad(mod);
+
+        SuperSpecialWarpinatorTool.actions.Add(Name, this);
+    }
+
+    public void Unload() => OnUnload();
+
+    public virtual void OnLoad(Mod mod) { }
+
+    public virtual void OnUnload() { }
+
+    public virtual void SetDefaults() { }
+
+    public virtual void DrawIcon(SpriteBatch spriteBatch, Vector2 center, Color color, float scale)
+    {
+        spriteBatch.Draw(iconTexture, center, iconTexture.Frame(), color, 0, iconTexture.Size() * 0.5f, scale, 0, 0);
+    }
+
+    public virtual void Update(Player player) { }
+
+    public virtual void Perform(Player player) { }
+}

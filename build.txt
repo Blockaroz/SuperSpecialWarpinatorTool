@@ -1,0 +1,3 @@
+displayName = The Super Special Warpinator
+author = Blockaroz
+version = 0.6

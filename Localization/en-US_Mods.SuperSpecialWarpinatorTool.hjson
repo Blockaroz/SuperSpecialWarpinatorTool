@@ -1,0 +1,28 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	SuperSpecialWarpinator: {
+		DisplayName: Super Special Warpinator
+		Tooltip:
+			'''
+			Allows ultimate control!
+			<right> while holding to use the tool menu
+			'''
+	}
+}
+
+WarpinatorActions: {
+	Butcher: Butcher
+	Light: Light
+	Settings: Settings
+}
+
+WarpinatorMenuElements: {
+	Enabled: Enabled
+	Color: Color
+	Test: Test
+	MenuOnLeft: Menu on left side
+	ShowName: Show tool name
+	Permanent: Permanently
+	DespawnNPC: Despawn NPC
+}
