@@ -24,9 +24,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override void Update(Player player)
         {
-            if (showName.Value)
-                showNamePerm.Value &= showName.Value;
-            else
+            if (!showName.Value)
                 showName.Value |= showNamePerm.Value;
 
             WarpinatorUISystem.WarpinatorUI.Lefty = lefty.Value;

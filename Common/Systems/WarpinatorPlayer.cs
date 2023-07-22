@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.IO;
 using Terraria.ModLoader;
 
 namespace SuperSpecialWarpinatorTool.Common.Systems
@@ -18,6 +19,11 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
         public WarpinatorAction CurrentAction => actions[currentActionIndex];
 
+        public override void Load()
+        {
+            On_Player.SavePlayer += SaveSettings;
+        }
+
         public override void OnEnterWorld()
         {
             actions = new List<WarpinatorAction>
@@ -27,12 +33,13 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
                 SuperSpecialWarpinatorTool.actions["Butcher"],
             };
 
-            WarpinatorSave.Load();
+            WarpinatorIO.Load(Player);
         }
 
-        public override void Unload()
+        private void SaveSettings(On_Player.orig_SavePlayer orig, PlayerFileData playerFile, bool skipMapSave)
         {
-            WarpinatorSave.Save();
+            orig(playerFile, skipMapSave);
+            WarpinatorIO.Save(playerFile.Player);
         }
 
         public override void PostUpdate()

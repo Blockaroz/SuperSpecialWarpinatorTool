@@ -31,7 +31,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
             //color.Value = Main.hslToRgb(hsv[0], hsv[1], hsv[2]);
-            color.Value = Main.DiscoColor;
         }
     }
 }
