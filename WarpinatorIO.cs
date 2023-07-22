@@ -12,6 +12,7 @@ using System.Runtime.Serialization;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using Terraria.WorldBuilding;
 using tModPorter;
 
 namespace SuperSpecialWarpinatorTool;
@@ -21,8 +22,6 @@ internal class WarpinatorIO : ModSystem
 {
     internal static readonly string SavePath = Path.Combine(Main.SavePath, "SuperSpecialWarpinator");
     internal static readonly string ImagePath = Path.Combine(Main.SavePath, "SuperSpecialWarpinator/Captures");
-
-    private static Dictionary<string, object> saveData;
 
     internal static readonly JsonSerializerSettings serializerSettings = new()
     {
@@ -37,7 +36,16 @@ internal class WarpinatorIO : ModSystem
 
     internal static void Save(Player player)
     {
-        GetData(player);
+        Dictionary<string, object> saveData = new Dictionary<string, object>();
+        foreach (WarpinatorAction action in player.WarpPlayer().actions)
+        {
+            FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            foreach (FieldInfo field in fields)
+            {
+                string key = action.Name + ':' + field.Name;
+                saveData.Add(key, field.GetValue(action));
+            }
+        }
 
         Directory.CreateDirectory(SavePath);
         string path = Path.Combine(SavePath, "ActionConfig.json");
@@ -53,43 +61,25 @@ internal class WarpinatorIO : ModSystem
 
         try
         {
-            saveData = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path), serializerSettings); 
-            SetData(player);
+            Dictionary<string, object> saveData = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path), serializerSettings);
+            
+            foreach (WarpinatorAction action in player.WarpPlayer().actions)
+            {
+                FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+                foreach (FieldInfo field in fields.Where(n => n.MemberType == MemberTypes.Field))
+                {
+                    string key = action.Name + ':' + field.Name;
+                    if (saveData.TryGetValue(key, out object value))
+                    {
+                        if (value != null)
+                            field.SetValue(action, value);
+                    }
+                }
+            }
         }
         catch
         {              
             Save(player);
-        }
-    }
-
-    private static void GetData(Player player)
-    {
-        saveData = new Dictionary<string, object>();
-        foreach (WarpinatorAction action in player.WarpPlayer().actions)
-        {
-            FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-            foreach (FieldInfo field in fields)
-            {
-                string key = action.Name + ':' + field.Name;
-                saveData.Add(key, field.GetValue(action));
-            }
-        }
-    }
-
-    private static void SetData(Player player)
-    {
-        foreach (WarpinatorAction action in player.WarpPlayer().actions)
-        {
-            FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-            foreach (FieldInfo field in fields.Where(n => n.MemberType == MemberTypes.Field))
-            {
-                string key = action.Name + ':' + field.Name;
-                if (saveData.TryGetValue(key, out object value))
-                {
-                    if (value != null)
-                        field.SetValue(action, value);
-                }
-            }
         }
     }
 }
