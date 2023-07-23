@@ -4,6 +4,7 @@ using MonoMod.Utils;
 using SuperSpecialWarpinatorTool;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -40,7 +41,7 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
     public void Load(Mod mod)
     {
         Mod = mod;
-        DisplayName = Language.GetOrRegister(Mod.GetLocalizationKey(LocalizationCategory + '.' + Name));
+        DisplayName = Language.GetOrRegister(Mod.GetLocalizationKey(LocalizationCategory + '.' + Name), () => Regex.Replace(Name, "([A-Z])", " $1").Trim());
         Type = SuperSpecialWarpinatorTool.actions.Count;
         iconTexture = new TextureAsset(Texture);
 

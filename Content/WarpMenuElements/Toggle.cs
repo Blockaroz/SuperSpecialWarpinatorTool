@@ -12,10 +12,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
     {
         public Ref<bool> condition;
 
-        public Toggle(Ref<bool> condition, bool defaultValue = false)
+        public Toggle(Ref<bool> condition)
         {
             this.condition = condition;
-            this.condition.Value = defaultValue;
         }
 
         public int Height => 32;
@@ -59,7 +58,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             if (hovering && player.WarpPlayer().mouseLeft)
             {
                 condition.Value = !condition.Value;
-                SoundEngine.PlaySound(SoundID.MenuTick.WithPitchOffset(0.33f));
+                SoundEngine.PlaySound(condition.Value ? AssetDirectory.Sounds_UI.MenuTickSelect : AssetDirectory.Sounds_UI.MenuTickSelectOff);
             }
 
             oldHover = hovering;

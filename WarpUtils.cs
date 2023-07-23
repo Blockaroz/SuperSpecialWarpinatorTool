@@ -13,7 +13,7 @@ namespace SuperSpecialWarpinatorTool
 {
     public static class WarpUtils
     {
-        public static Color WarpColor(float x, byte a = 255) => Color.Lerp(new Color(110, 48, 255, a), new Color(255, 25, 174, a), MathHelper.Clamp(x, 0, 1));
+        public static Color WarpColor(byte a = 255) => new Color(255, 25, 255, a);
 
         public static WarpinatorPlayer WarpPlayer(this Player player) => player.GetModPlayer<WarpinatorPlayer>();
 
@@ -33,7 +33,22 @@ namespace SuperSpecialWarpinatorTool
 
         public static bool shakingMouse;
 
-        public static int CommonOptionHeight = 32;
+        public static void DrawRectangleIndicator(SpriteBatch spritebatch, Rectangle rectangle)
+        {
+            Texture2D texture = AssetDirectory.Textures_UI.HitboxIndicator;
+
+            Vector2 right = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            spritebatch.Draw(texture, right, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, 0, 0);            
+            
+            Vector2 left = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            spritebatch.Draw(texture, left, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
+            
+            Vector2 top = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            spritebatch.Draw(texture, top, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
+            
+            Vector2 bottom = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            spritebatch.Draw(texture, bottom, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
+        }
     }
 
     public class MouseShakeSystem : ModSystem

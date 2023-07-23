@@ -6,6 +6,8 @@ namespace SuperSpecialWarpinatorTool
 {
 	public class SuperSpecialWarpinatorTool : Mod
     {
-        public static Dictionary<string, WarpinatorAction> actions = new Dictionary<string, WarpinatorAction>();
+        internal static Dictionary<string, WarpinatorAction> actions = new Dictionary<string, WarpinatorAction>();
+
+        public static WarpinatorAction GetActionInstance<T>() where T : WarpinatorAction => actions[typeof(T).Name];
     }
 }

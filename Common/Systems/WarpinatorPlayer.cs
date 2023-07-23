@@ -1,10 +1,7 @@
-﻿using SuperSpecialWarpinatorTool.Common.UI;
+﻿using Microsoft.Xna.Framework.Input;
+using SuperSpecialWarpinatorTool.Content.WarpinatorActions;
 using SuperSpecialWarpinatorTool.Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.IO;
@@ -28,9 +25,11 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
         {
             actions = new List<WarpinatorAction>
             {
-                SuperSpecialWarpinatorTool.actions["Settings"],
-                SuperSpecialWarpinatorTool.actions["Light"],
-                SuperSpecialWarpinatorTool.actions["Butcher"],
+                SuperSpecialWarpinatorTool.GetActionInstance<Settings>(),
+                SuperSpecialWarpinatorTool.GetActionInstance<Light>(),
+                SuperSpecialWarpinatorTool.GetActionInstance<Move>(),
+                SuperSpecialWarpinatorTool.GetActionInstance<Butcher>(),
+                SuperSpecialWarpinatorTool.GetActionInstance<EditEntity>(),
             };
 
             WarpinatorIO.Load(Player);

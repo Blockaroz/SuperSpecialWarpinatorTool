@@ -13,6 +13,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
     public class Butcher : WarpinatorAction
     {
         public Ref<bool> despawn = new Ref<bool>();
+        public Ref<bool> all = new Ref<bool>();
 
         public override void SetDefaults()
         {
@@ -40,6 +41,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             new Text(Mod, "DespawnNPC"),
             new Toggle(despawn),
+            new Text(Mod, "AllNPCs", Color.DarkGray, 0.66f),
+            new Toggle(all),
         };
     }
 }

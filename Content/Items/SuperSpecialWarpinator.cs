@@ -26,8 +26,8 @@ namespace SuperSpecialWarpinatorTool.Content.Items
 
         public override void SetDefaults()
         {
-            Item.width = 50;
-            Item.height = 28;
+            Item.width = 28;
+            Item.height = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 10;
             Item.useTime = 10;
@@ -50,5 +50,11 @@ namespace SuperSpecialWarpinatorTool.Content.Items
         public override bool CanUseItem(Player player) => player.WarpPlayer().CurrentAction.HasPerformableAction;
 
         public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.5f);
+
+        public override void EquipFrameEffects(Player player, EquipType type)
+        {
+            player.handon = -1;
+            player.handoff = -1;
+        }
     }
 }

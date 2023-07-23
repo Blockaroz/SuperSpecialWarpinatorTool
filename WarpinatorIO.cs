@@ -1,6 +1,4 @@
-﻿using FullSerializer;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SuperSpecialWarpinatorTool.Core;
 using System;
@@ -8,16 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
-using Terraria.WorldBuilding;
-using tModPorter;
 
 namespace SuperSpecialWarpinatorTool;
 
-[JsonObject(MemberSerialization.OptIn)]
 internal class WarpinatorIO : ModSystem
 {
     internal static readonly string SavePath = Path.Combine(Main.SavePath, "SuperSpecialWarpinator");
@@ -26,7 +19,7 @@ internal class WarpinatorIO : ModSystem
     internal static readonly JsonSerializerSettings serializerSettings = new()
     {
         Formatting = Formatting.Indented,
-        TypeNameHandling = TypeNameHandling.Auto,
+        TypeNameHandling = TypeNameHandling.Objects,
         DefaultValueHandling = DefaultValueHandling.Populate,
         ObjectCreationHandling = ObjectCreationHandling.Replace,
         NullValueHandling = NullValueHandling.Include,
@@ -37,6 +30,7 @@ internal class WarpinatorIO : ModSystem
     internal static void Save(Player player)
     {
         Dictionary<string, object> saveData = new Dictionary<string, object>();
+
         foreach (WarpinatorAction action in player.WarpPlayer().actions)
         {
             FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -62,7 +56,7 @@ internal class WarpinatorIO : ModSystem
         try
         {
             Dictionary<string, object> saveData = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path), serializerSettings);
-            
+
             foreach (WarpinatorAction action in player.WarpPlayer().actions)
             {
                 FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -72,7 +66,12 @@ internal class WarpinatorIO : ModSystem
                     if (saveData.TryGetValue(key, out object value))
                     {
                         if (value != null)
-                            field.SetValue(action, value);
+                        {
+                            var fieldData = field.GetValue(action).GetType().GetField("Value");
+                            var incomingData = value.GetType().GetField("Value");
+                            if (fieldData != null && incomingData != null)
+                                fieldData.SetValue(field.GetValue(action), incomingData.GetValue(value));
+                        }
                     }
                 }
             }

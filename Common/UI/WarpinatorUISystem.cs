@@ -9,11 +9,11 @@ namespace SuperSpecialWarpinatorTool.Common.UI
     public class WarpinatorUISystem : ModSystem
     {
         internal static UserInterface WarpinatorInterface;
-        internal static WarpinatorUI WarpinatorUI;
+        internal static WarpUI WarpinatorUI;
 
         public override void OnModLoad()
         {
-            WarpinatorUI = new WarpinatorUI();
+            WarpinatorUI = new WarpUI();
             WarpinatorUI.Activate();
             WarpinatorInterface = new UserInterface();
             WarpinatorInterface.SetState(WarpinatorUI);

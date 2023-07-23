@@ -8,6 +8,7 @@ namespace SuperSpecialWarpinatorTool;
 public readonly record struct AssetDirectory
 {
     public static string TexturePath = $"{nameof(SuperSpecialWarpinatorTool)}/Assets/Textures/";
+    public static string SoundPath = $"{nameof(SuperSpecialWarpinatorTool)}/Assets/Sounds/";
 
     public struct Textures_UI
     {
@@ -47,20 +48,32 @@ public readonly record struct AssetDirectory
         };
 
         public static TextureAsset ToggleButton = new TextureAsset(TexturePath + "UI/ToggleButton");
-        public static TextureAsset DisplayButton = new TextureAsset(TexturePath + "UI/DisplayButton");
+
+        public static TextureAsset HitboxIndicator = new TextureAsset(TexturePath + "UI/HitboxIndicator");
+
+        public static TextureAsset SelectorButton = new TextureAsset(TexturePath + "UI/SelectorButton");
+        public static TextureAsset SelectorCursor = new TextureAsset(TexturePath + "UI/SelectorCursor");
+
         public static TextureAsset Slider = new TextureAsset(TexturePath + "UI/SliderBar");
         public static TextureAsset SliderButton = new TextureAsset(TexturePath + "UI/SliderButton");
     }
 
+    public struct Textures_Player
+    {
+        public static TextureAsset WarpinatorHandsOn = new TextureAsset(TexturePath + "Player/SuperSpecialWarpinator_HandsOn");
+        public static TextureAsset WarpinatorHandsOff = new TextureAsset(TexturePath + "Player/SuperSpecialWarpinator_HandsOff");
+        public static TextureAsset WarpinatorTank = new TextureAsset(TexturePath + "Player/SuperSpecialWarpinator_Tank");
+    }
+
     public struct Sounds_UI
     {
-        public static SoundStyle MenuTick = SoundID.MenuTick.WithPitchOffset(0.7f);
-        public static SoundStyle MenuTickSelect = SoundID.MenuTick.WithPitchOffset(0.33f);
+        public static SoundStyle MenuTick = new SoundStyle(SoundPath + "UI/MenuTick") with { MaxInstances = 0, PitchVariance = 0.1f };
+        public static SoundStyle MenuTickSelect = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0 };
+        public static SoundStyle MenuTickSelectOff = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0, Pitch = -0.3f };
 
-        public static SoundStyle MenuOpen = SoundID.MenuOpen.WithPitchOffset(0.33f);
-        public static SoundStyle MenuClose = SoundID.MenuClose.WithPitchOffset(0.33f);
+        public static SoundStyle MenuPageSelect = new SoundStyle(SoundPath + "UI/MenuPageSelect") with { MaxInstances = 0 };
 
-        public static SoundStyle MiniMenuOpen = SoundID.MenuOpen.WithPitchOffset(0.7f);
-        public static SoundStyle MiniMenuClose = SoundID.MenuClose.WithPitchOffset(0.7f);
+        public static SoundStyle MenuOpen = new SoundStyle(SoundPath + "UI/MenuOpen") with { MaxInstances = 0 };
+        public static SoundStyle MenuClose = new SoundStyle(SoundPath + "UI/MenuClose") with { MaxInstances = 0 };
     }
 }

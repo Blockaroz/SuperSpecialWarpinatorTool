@@ -25,7 +25,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         public override void SetDefaults()
         {
             enabled.Value = false;
-            lightColor.Value = Color.White;
+            lightColor.Value = WarpUtils.WarpColor();
         }
 
         public override void Update(Player player)
@@ -52,6 +52,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         public override void DrawIcon(SpriteBatch spriteBatch, Vector2 center, Color color, float scale)
         {
             base.DrawIcon(spriteBatch, center, color, scale);
+
             Color bulbColor = new Color(lightColor.Value.ToVector3() * 0.7f + Vector3.One * 0.2f);
             spriteBatch.Draw(glowTexture, center, iconTexture.Frame(), bulbColor.MultiplyRGBA(color), 0, iconTexture.Size() * 0.5f, scale, 0, 0);
         }

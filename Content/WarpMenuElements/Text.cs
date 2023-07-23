@@ -24,7 +24,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public string FullName => GetType().FullName;
 
-        public int Height => (int)(24 * scale);
+        public int Height => (int)(24 * MathF.Pow(scale, 2f));
 
         private LocalizedText text;
 

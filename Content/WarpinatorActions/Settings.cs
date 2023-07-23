@@ -12,24 +12,30 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         public override bool HasPerformableAction => false;
 
         public Ref<bool> lefty = new Ref<bool>();
-        public Ref<bool> showName = new Ref<bool>();
-        public Ref<bool> showNamePerm = new Ref<bool>();
+        public Ref<bool> name = new Ref<bool>();
+        public Ref<bool> namePermanent = new Ref<bool>();
+        public Ref<bool> selectionWires = new Ref<bool>();
+        public Ref<bool> entityHitboxes = new Ref<bool>();
 
         public override void SetDefaults()
         {
             lefty.Value = false;
-            showName.Value = true;
-            showNamePerm.Value = false;
+            name.Value = true;
+            namePermanent.Value = false;
+            selectionWires.Value = true;
+            entityHitboxes.Value = true;
         }
 
         public override void Update(Player player)
         {
-            if (!showName.Value)
-                showName.Value |= showNamePerm.Value;
+            if (!name.Value)
+                name.Value |= namePermanent.Value;
 
-            WarpinatorUISystem.WarpinatorUI.Lefty = lefty.Value;
-            WarpinatorUISystem.WarpinatorUI.ShowNamePermanent = showNamePerm.Value;
-            WarpinatorUISystem.WarpinatorUI.ShowName = showName.Value || showNamePerm.Value;
+            WarpUI.UISettings.Lefty = lefty.Value;
+            WarpUI.UISettings.NamePerm = namePermanent.Value;
+            WarpUI.UISettings.Name = name.Value || namePermanent.Value;
+            WarpUI.UISettings.SelectionWires = selectionWires.Value;
+            WarpUI.UISettings.EntityHitboxes = entityHitboxes.Value;
         }
 
         public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>
@@ -37,9 +43,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             new Text(Mod, "MenuOnLeft"),
             new Toggle(lefty),
             new Text(Mod, "ShowName"),
-            new Toggle(showName, true),
-            new Text(Mod, "Permanent", Color.DimGray * 0.7f, 0.7f),
-            new Toggle(showNamePerm, true),
+            new Toggle(name),
+            new Text(Mod, "Permanent", Color.DarkGray, 0.66f),
+            new Toggle(namePermanent),
         };
     }
 }
