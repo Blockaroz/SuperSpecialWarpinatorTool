@@ -15,17 +15,19 @@ WarpinatorActions: {
 	Butcher: Butcher
 	Light: Light
 	Settings: Settings
-	EditEntity: Edit Entity
-	Move: Move
+	EditEntity: Move/Edit Entity
+	Notepad: Notepad
 }
 
 WarpinatorMenuElements: {
+	Test: Test
 	Enabled: Enabled
 	Color: Color
-	Test: Test
 	MenuOnLeft: Menu on left side
 	ShowName: Show tool name
 	Permanent: Permanently
 	DespawnNPC: Despawn NPC
-	AllNPCs: All NPCs
+	AffectAllNPCs: Affect All NPCs
+	NPCs: NPCs
+	Projectiles: Projectiles
 }

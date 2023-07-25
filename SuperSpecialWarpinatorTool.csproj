@@ -8,11 +8,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Textures\Player\PageButton_0.png" />
+    <None Remove="Assets\Textures\Player\PageButton_1.png" />
     <None Remove="Assets\Textures\UI\HitboxIndicator.png" />
     <None Remove="Assets\Textures\UI\SelectorButton.png" />
     <None Remove="Assets\Textures\UI\SelectorCursor.png" />
     <None Remove="Content\Items\SuperSpecialWarpinator_Tank.png" />
     <None Remove="Content\WarpinatorActions\EditEntity.png" />
+    <None Remove="Content\WarpinatorActions\Notepad.png" />
     <None Remove="icon_small.png" />
   </ItemGroup>
   <ItemGroup>

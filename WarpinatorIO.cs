@@ -31,7 +31,7 @@ internal class WarpinatorIO : ModSystem
     {
         Dictionary<string, object> saveData = new Dictionary<string, object>();
 
-        foreach (WarpinatorAction action in player.WarpPlayer().actions)
+        foreach (WarpinatorAction action in player.WarpPlayer().actions.Where(n => n is not IDoNotAutosave))
         {
             FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (FieldInfo field in fields)
@@ -57,7 +57,7 @@ internal class WarpinatorIO : ModSystem
         {
             Dictionary<string, object> saveData = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path), serializerSettings);
 
-            foreach (WarpinatorAction action in player.WarpPlayer().actions)
+            foreach (WarpinatorAction action in player.WarpPlayer().actions.Where(n => n is not IDoNotAutosave))
             {
                 FieldInfo[] fields = action.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
                 foreach (FieldInfo field in fields.Where(n => n.MemberType == MemberTypes.Field))

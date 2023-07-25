@@ -13,7 +13,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
     public class Butcher : WarpinatorAction
     {
         public Ref<bool> despawn = new Ref<bool>();
-        public Ref<bool> all = new Ref<bool>();
+        public Ref<bool> world = new Ref<bool>();
 
         public override void SetDefaults()
         {
@@ -22,9 +22,21 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override void Perform(Player player)
         {
-            if (Main.npc.Any(n => n.Hitbox.Contains(Main.MouseWorld.ToPoint())))
+            if (world.Value)
             {
-                NPC target = Main.npc.First(n => n.Hitbox.Contains(Main.MouseWorld.ToPoint()));
+                foreach (NPC npc in Main.npc.Where(n => n.active))
+                {
+                    npc.life = 0;
+
+                    if (despawn.Value)
+                        npc.active = false;
+                    else
+                        npc.checkDead();
+                }
+            }
+            else if (Main.npc.Any(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())))
+            {
+                NPC target = Main.npc.First(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint()));
 
                 target.life = 0;
 
@@ -41,8 +53,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             new Text(Mod, "DespawnNPC"),
             new Toggle(despawn),
-            new Text(Mod, "AllNPCs", Color.DarkGray, 0.66f),
-            new Toggle(all),
+            new Text(Mod, "AffectAllNPCs"),
+            new Toggle(world),
         };
     }
 }

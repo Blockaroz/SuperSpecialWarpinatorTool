@@ -7,6 +7,7 @@ using SuperSpecialWarpinatorTool.Core;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 
 namespace SuperSpecialWarpinatorTool
@@ -24,6 +25,7 @@ namespace SuperSpecialWarpinatorTool
         {
             player.mouseInterface = condition;
             WarpinatorUISystem.WarpinatorUI.OnMyInterface = condition;
+            WarpinatorSystem.StopHotbar();
         } 
 
         public static int WarpinatorID => ModContent.ItemType<SuperSpecialWarpinator>();
@@ -38,16 +40,16 @@ namespace SuperSpecialWarpinatorTool
             Texture2D texture = AssetDirectory.Textures_UI.HitboxIndicator;
 
             Vector2 right = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, right, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, 0, 0);            
+            spritebatch.Draw(texture, right - Main.screenPosition, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, 0, 0);            
             
             Vector2 left = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, left, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
+            spritebatch.Draw(texture, left - Main.screenPosition, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
             
             Vector2 top = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, top, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
+            spritebatch.Draw(texture, top - Main.screenPosition, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
             
             Vector2 bottom = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, bottom, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
+            spritebatch.Draw(texture, bottom - Main.screenPosition, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
         }
     }
 

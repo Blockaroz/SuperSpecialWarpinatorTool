@@ -11,13 +11,13 @@ using Terraria;
 
 namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 {
-    public class EntitySelector : IWarpMenuElement
+    public class Selector<T> : IWarpMenuElement
     {
-        Ref<Entity> selection;
+        Ref<T> selection;
 
         private bool dragging;
 
-        public EntitySelector(Ref<Entity> selection)
+        public Selector(Ref<T> selection)
         {
             this.selection = selection;
         }
@@ -26,6 +26,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
+            Vector2 buttonPos = position + new Vector2(40 * direction, 0);
+
             if (WarpUI.UISettings.SelectionWires)
             {
 
@@ -34,6 +36,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
+            Vector2 buttonPos = position + new Vector2(40 * direction, 0);
             if (dragging && player.WarpPlayer().mouseRight)
                 dragging = false;
         }

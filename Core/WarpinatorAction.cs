@@ -34,9 +34,11 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
 
     public bool Selected { get; internal set; }
 
-    public List<IWarpMenuElement> Options { get; private set; }
+    public List<IWarpMenuElement> MenuElements { get; private set; }
 
     public virtual List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>();
+
+    public WarpinatorAction NewInstance() => (WarpinatorAction)MemberwiseClone();
 
     public void Load(Mod mod)
     {
@@ -45,10 +47,10 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
         Type = SuperSpecialWarpinatorTool.actions.Count;
         iconTexture = new TextureAsset(Texture);
 
-        SetDefaults();
-        Options = AddMenuElements();
-
         OnLoad(mod);
+
+        SetDefaults();
+        MenuElements = AddMenuElements();
 
         SuperSpecialWarpinatorTool.actions.Add(Name, this);
     }

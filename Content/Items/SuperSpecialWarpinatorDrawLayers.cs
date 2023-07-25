@@ -60,7 +60,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
         {
             Texture2D backpackTexture = AssetDirectory.Textures_Player.WarpinatorTank;
 
-            Vector2 vec5 = drawInfo.BodyPosition();
+            Vector2 vec5 = drawInfo.BodyPosition() + new Vector2(-13 * drawInfo.drawPlayer.direction, -1 * drawInfo.drawPlayer.gravDir);
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 

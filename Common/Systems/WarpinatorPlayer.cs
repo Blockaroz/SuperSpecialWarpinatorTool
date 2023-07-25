@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using SuperSpecialWarpinatorTool.Content.WarpinatorActions;
 using SuperSpecialWarpinatorTool.Core;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
@@ -25,11 +26,11 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
         {
             actions = new List<WarpinatorAction>
             {
-                SuperSpecialWarpinatorTool.GetActionInstance<Settings>(),
-                SuperSpecialWarpinatorTool.GetActionInstance<Light>(),
-                SuperSpecialWarpinatorTool.GetActionInstance<Move>(),
-                SuperSpecialWarpinatorTool.GetActionInstance<Butcher>(),
-                SuperSpecialWarpinatorTool.GetActionInstance<EditEntity>(),
+                SuperSpecialWarpinatorTool.ActionType<Settings>(),
+                SuperSpecialWarpinatorTool.ActionType<Light>(),
+                SuperSpecialWarpinatorTool.ActionType<Butcher>(),
+                SuperSpecialWarpinatorTool.ActionType<EditEntity>(),
+                SuperSpecialWarpinatorTool.ActionType<Notepad>(),
             };
 
             WarpinatorIO.Load(Player);

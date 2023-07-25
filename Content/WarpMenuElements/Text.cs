@@ -26,16 +26,16 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public int Height => (int)(24 * MathF.Pow(scale, 2f));
 
-        private LocalizedText text;
+        private readonly LocalizedText text;
 
-        private Color color;
+        private readonly Color drawColor;
 
         private float scale;
 
-        public Text(Mod mod, string key, Color? color = null, float scale = 1f)
+        public Text(Mod mod, string key, Color? drawColor = null, float scale = 1f)
         {
             text = Language.GetOrRegister(mod.GetLocalizationKey(LocalizationCategory + '.' + key));
-            this.color = color.HasValue ? color.Value : Color.White;
+            this.drawColor = drawColor.HasValue ? drawColor.Value : Color.White;
             this.scale = scale;
         }
 
@@ -43,7 +43,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         {
             Vector2 pos = position + new Vector2(direction < 0 ? -FontAssets.MouseText.Value.MeasureString(text.Value).X * scale : 0, 0); 
 
-            Utils.DrawBorderString(spriteBatch, text.Value, pos, color, scale);
+            Utils.DrawBorderString(spriteBatch, text.Value, pos, drawColor.MultiplyRGBA(color), scale);
         }
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction) { }

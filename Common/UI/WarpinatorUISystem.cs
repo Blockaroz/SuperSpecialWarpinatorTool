@@ -33,18 +33,30 @@ namespace SuperSpecialWarpinatorTool.Common.UI
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
+            layers.Insert(0, new LegacyGameInterfaceLayer(
+                "SuperSpecialWarpinator: Hitboxes",
+                delegate
+                {
+                    if (WarpUI.UISettings.EntityHitboxes && Main.LocalPlayer.ValidWarpinator())
+                    {
+
+                    }
+                    return true;
+                },
+                InterfaceScaleType.Game));
+
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Wire Selection"));
             if (mouseTextIndex != -1)
             {
                 layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
                     "SuperSpecialWarpinator: UI",
-                    delegate {
+                    delegate 
+                    {
                         if (WarpinatorInterface.CurrentState != null && Main.LocalPlayer.WarpPlayer().actions != null)
                             WarpinatorInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
-                    InterfaceScaleType.UI)
-                );
+                    InterfaceScaleType.UI));
             }
         }
     }

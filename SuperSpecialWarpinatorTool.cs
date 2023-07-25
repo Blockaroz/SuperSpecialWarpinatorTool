@@ -8,6 +8,6 @@ namespace SuperSpecialWarpinatorTool
     {
         internal static Dictionary<string, WarpinatorAction> actions = new Dictionary<string, WarpinatorAction>();
 
-        public static WarpinatorAction GetActionInstance<T>() where T : WarpinatorAction => actions[typeof(T).Name];
+        public static WarpinatorAction ActionType<T>() where T : WarpinatorAction => actions[typeof(T).Name].NewInstance();
     }
 }

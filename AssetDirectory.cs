@@ -34,6 +34,12 @@ public readonly record struct AssetDirectory
             new TextureAsset(TexturePath + "UI/FlowerButton_" + 0),
             new TextureAsset(TexturePath + "UI/FlowerButton_" + 1),
         };        
+               
+        public static TextureAsset[] PageButton = new TextureAsset[]
+        {
+            new TextureAsset(TexturePath + "UI/PageButton_" + 0),
+            new TextureAsset(TexturePath + "UI/PageButton_" + 1),
+        };        
         
         public static TextureAsset[] DragButton = new TextureAsset[]
         {
@@ -69,11 +75,14 @@ public readonly record struct AssetDirectory
     {
         public static SoundStyle MenuTick = new SoundStyle(SoundPath + "UI/MenuTick") with { MaxInstances = 0, PitchVariance = 0.1f };
         public static SoundStyle MenuTickSelect = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0 };
-        public static SoundStyle MenuTickSelectOff = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0, Pitch = -0.3f };
+        public static SoundStyle MenuTickSelectOff = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0, Pitch = -0.25f };
 
         public static SoundStyle MenuPageSelect = new SoundStyle(SoundPath + "UI/MenuPageSelect") with { MaxInstances = 0 };
 
         public static SoundStyle MenuOpen = new SoundStyle(SoundPath + "UI/MenuOpen") with { MaxInstances = 0 };
-        public static SoundStyle MenuClose = new SoundStyle(SoundPath + "UI/MenuClose") with { MaxInstances = 0 };
+        public static SoundStyle MenClose = new SoundStyle(SoundPath + "UI/MenuClose") with { MaxInstances = 0 };        
+        
+        public static SoundStyle MenuSmallOpen = new SoundStyle(SoundPath + "UI/MenuSmallOpen") with { MaxInstances = 0 };
+        public static SoundStyle MenuSmallClose = new SoundStyle(SoundPath + "UI/MenuSmallClose") with { MaxInstances = 0 };
     }
 }

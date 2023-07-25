@@ -53,7 +53,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             base.DrawIcon(spriteBatch, center, color, scale);
 
-            Color bulbColor = new Color(lightColor.Value.ToVector3() * 0.7f + Vector3.One * 0.2f);
+            Color bulbColor = new Color(lightColor.Value.ToVector3() * 0.9f + Vector3.One * 0.1f);
             spriteBatch.Draw(glowTexture, center, iconTexture.Frame(), bulbColor.MultiplyRGBA(color), 0, iconTexture.Size() * 0.5f, scale, 0, 0);
         }
     }
