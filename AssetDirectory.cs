@@ -12,56 +12,38 @@ public readonly record struct AssetDirectory
 
     public struct Textures_UI
     {
-        public static TextureAsset[] WiresMini = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/Wires/WiresMini_" + 0),
-            new TextureAsset(TexturePath + "UI/Wires/WiresMini_" + 1),
-            new TextureAsset(TexturePath + "UI/Wires/WiresMini_" + 2),
-            new TextureAsset(TexturePath + "UI/Wires/WiresMini_" + 3)
-        };        
-        
-        public static TextureAsset[] WireTypes = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/Wires/WireType_" + 0),
-            new TextureAsset(TexturePath + "UI/Wires/WireType_" + 1),
-            new TextureAsset(TexturePath + "UI/Wires/WireType_" + 2),
-            new TextureAsset(TexturePath + "UI/Wires/WireType_" + 3),
-            new TextureAsset(TexturePath + "UI/Wires/WireType_" + 4)
-        };
+        public static TextureAsset[] WarpPanel = TextureAsset.LoadArray(TexturePath + "UI/WarpPanel_", 2);
 
-        public static TextureAsset[] FlowerButton = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/FlowerButton_" + 0),
-            new TextureAsset(TexturePath + "UI/FlowerButton_" + 1),
-        };        
-               
-        public static TextureAsset[] PageButton = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/PageButton_" + 0),
-            new TextureAsset(TexturePath + "UI/PageButton_" + 1),
-        };        
-        
-        public static TextureAsset[] DragButton = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/FlowerButtonDrag_" + 0),
-            new TextureAsset(TexturePath + "UI/FlowerButtonDrag_" + 1),
-        };
+        public static TextureAsset[] FlowerButton = TextureAsset.LoadArray(TexturePath + "UI/FlowerButton_", 2);
 
-        public static TextureAsset[] ButtonArrow = new TextureAsset[]
-        {
-            new TextureAsset(TexturePath + "UI/ButtonArrow_" + 0),
-            new TextureAsset(TexturePath + "UI/ButtonArrow_" + 1),
-        };
+        public static TextureAsset[] PageButton = TextureAsset.LoadArray(TexturePath + "UI/PageButton_", 2);
+
+        public static TextureAsset[] DragButton = TextureAsset.LoadArray(TexturePath + "UI/FlowerButtonDrag_", 2);
+
+        public static TextureAsset[] ButtonArrow = TextureAsset.LoadArray(TexturePath + "UI/ButtonArrow_", 2);
+
+        public static TextureAsset[] HitboxIndicator = TextureAsset.LoadArray(TexturePath + "UI/HitboxIndicator_", 2);
+
+        public static TextureAsset[] WiresMini = TextureAsset.LoadArray(TexturePath + "UI/Wires/WiresMini_", 4);
+
+        public static TextureAsset[] WireTypes = TextureAsset.LoadArray(TexturePath + "UI/Wires/WireType_", 5);
 
         public static TextureAsset ToggleButton = new TextureAsset(TexturePath + "UI/ToggleButton");
 
-        public static TextureAsset HitboxIndicator = new TextureAsset(TexturePath + "UI/HitboxIndicator");
-
         public static TextureAsset SelectorButton = new TextureAsset(TexturePath + "UI/SelectorButton");
+
         public static TextureAsset SelectorCursor = new TextureAsset(TexturePath + "UI/SelectorCursor");
 
         public static TextureAsset Slider = new TextureAsset(TexturePath + "UI/SliderBar");
         public static TextureAsset SliderButton = new TextureAsset(TexturePath + "UI/SliderButton");
+
+        public static TextureAsset ScrollButton = new TextureAsset(TexturePath + "UI/ScrollButton");
+
+        public struct CommonPages
+        {
+            public static TextureAsset Settings = new TextureAsset(TexturePath + "UI/CommonPages/Settings");
+            public static TextureAsset Info = new TextureAsset(TexturePath + "UI/CommonPages/Info");
+        }
     }
 
     public struct Textures_Player
@@ -80,7 +62,7 @@ public readonly record struct AssetDirectory
         public static SoundStyle MenuPageSelect = new SoundStyle(SoundPath + "UI/MenuPageSelect") with { MaxInstances = 0 };
 
         public static SoundStyle MenuOpen = new SoundStyle(SoundPath + "UI/MenuOpen") with { MaxInstances = 0 };
-        public static SoundStyle MenClose = new SoundStyle(SoundPath + "UI/MenuClose") with { MaxInstances = 0 };        
+        public static SoundStyle MenuClose = new SoundStyle(SoundPath + "UI/MenuClose") with { MaxInstances = 0 };        
         
         public static SoundStyle MenuSmallOpen = new SoundStyle(SoundPath + "UI/MenuSmallOpen") with { MaxInstances = 0 };
         public static SoundStyle MenuSmallClose = new SoundStyle(SoundPath + "UI/MenuSmallClose") with { MaxInstances = 0 };

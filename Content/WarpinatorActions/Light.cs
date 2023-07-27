@@ -36,9 +36,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>()            
         {       
-            new Text(Mod, "Enabled"),
+            new Text(Mod, "Common.Enabled"),
             new Toggle(enabled),
-            new Text(Mod, "Color"),
+            new Text(Mod, "Common.Color"),
             new ColorSlider(lightColor)
         };
 

@@ -34,7 +34,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             sliders[2].value = Main.rgbToHsl(colorValue.Value).Z;
         }
 
-        public int Height => 44;
+        public int Height => 55;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {

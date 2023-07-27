@@ -18,14 +18,14 @@ namespace SuperSpecialWarpinatorTool
 
         public static WarpinatorPlayer WarpPlayer(this Player player) => player.GetModPlayer<WarpinatorPlayer>();
 
-        public static bool ValidWarpinator(this Player player) => player.HeldItem.type == WarpinatorID;
+        public static bool HoldingWarpinator(this Player player) => player.HeldItem.type == WarpinatorID;
         public static bool HasWarpinator(this Player player) => player.HasItem(WarpinatorID);
 
         public static void WarpInterface(this Player player, bool condition = true)
         {
             player.mouseInterface = condition;
             WarpinatorUISystem.WarpinatorUI.OnMyInterface = condition;
-            WarpinatorSystem.StopHotbar();
+            VisualsSystem.StopHotbar();
         } 
 
         public static int WarpinatorID => ModContent.ItemType<SuperSpecialWarpinator>();
@@ -35,21 +35,28 @@ namespace SuperSpecialWarpinatorTool
 
         public static bool shakingMouse;
 
-        public static void DrawRectangleIndicator(SpriteBatch spritebatch, Rectangle rectangle)
+        public static readonly RasterizerState OverflowHiddenRasterizerState = new RasterizerState
         {
-            Texture2D texture = AssetDirectory.Textures_UI.HitboxIndicator;
+            CullMode = CullMode.None,
+            ScissorTestEnable = true
+        };
+
+        public static void DrawRectangleIndicator(SpriteBatch spritebatch, Rectangle rectangle, bool cursorColor)
+        {
+            Texture2D texture = AssetDirectory.Textures_UI.HitboxIndicator[cursorColor ? 1 : 0];
+            Color drawColor = cursorColor ? Main.MouseBorderColor : Color.White;
 
             Vector2 right = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, right - Main.screenPosition, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, 0, 0);            
+            spritebatch.Draw(texture, right - Main.screenPosition, texture.Frame(), drawColor, 0, texture.Size() * 0.5f, 1f, 0, 0);            
             
             Vector2 left = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, left - Main.screenPosition, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
+            spritebatch.Draw(texture, left - Main.screenPosition, texture.Frame(), drawColor, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
             
             Vector2 top = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, top - Main.screenPosition, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
+            spritebatch.Draw(texture, top - Main.screenPosition, texture.Frame(), drawColor, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
             
             Vector2 bottom = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, bottom - Main.screenPosition, texture.Frame(), Color.White, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
+            spritebatch.Draw(texture, bottom - Main.screenPosition, texture.Frame(), drawColor, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
         }
     }
 

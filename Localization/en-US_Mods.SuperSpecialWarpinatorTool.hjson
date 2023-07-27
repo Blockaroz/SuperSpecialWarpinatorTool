@@ -17,17 +17,34 @@ WarpinatorActions: {
 	Settings: Settings
 	EditEntity: Move/Edit Entity
 	Notepad: Notepad
+	TestAction: Test Action
 }
 
-WarpinatorMenuElements: {
-	Test: Test
-	Enabled: Enabled
-	Color: Color
-	MenuOnLeft: Menu on left side
-	ShowName: Show tool name
-	Permanent: Permanently
-	DespawnNPC: Despawn NPC
-	AffectAllNPCs: Affect All NPCs
+WarpinatorMenus: {
+	Settings: {
+		MenuOnLeft: Menu on left side
+		ShowName: Show tool name
+		CursorSettings: Cursor Settings
+		DisplaySpecialCursor: Use special cursor
+		UseCursorColor: Use cursor color
+	}
+
+	Butcher: {
+		DespawnNPC: Despawn NPC
+		AffectAllNPCs: Affect all NPCs
+	}
+}
+
+Common: {
+	Default: Default
+	Never: Never
+	Always: Always
+	Hovered: Hovered
+	None: None
+	All: All
 	NPCs: NPCs
 	Projectiles: Projectiles
+	Enabled: Enabled
+	Color: Color
+	Information: Information
 }

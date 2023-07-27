@@ -16,7 +16,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 {
     public class Text : IWarpMenuElement, ILocalizedModType
     {
-        public string LocalizationCategory => "WarpinatorMenuElements";
+        public string LocalizationCategory => "WarpinatorMenus";
 
         public Mod Mod { get; private set; }
 
@@ -24,7 +24,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public string FullName => GetType().FullName;
 
-        public int Height => (int)(24 * MathF.Pow(scale, 2f));
+        public int Height => (int)(25 * (scale < 1f ? (0.5f + scale * 0.5f) : scale));
 
         private readonly LocalizedText text;
 
@@ -34,15 +34,16 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public Text(Mod mod, string key, Color? drawColor = null, float scale = 1f)
         {
-            text = Language.GetOrRegister(mod.GetLocalizationKey(LocalizationCategory + '.' + key));
+            text = Language.GetOrRegister(mod.GetLocalizationKey(key));
             this.drawColor = drawColor.HasValue ? drawColor.Value : Color.White;
             this.scale = scale;
         }
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            Vector2 pos = position + new Vector2(direction < 0 ? -FontAssets.MouseText.Value.MeasureString(text.Value).X * scale : 0, 0); 
+            Vector2 pos = position + new Vector2(direction < 0 ? -FontAssets.MouseText.Value.MeasureString(text.Value).X * scale : 0, 0);
 
+            //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle((int)pos.X, (int)pos.Y, (int)FontAssets.MouseText.Value.MeasureString(text.Value).X, Height), Color.Black);
             Utils.DrawBorderString(spriteBatch, text.Value, pos, drawColor.MultiplyRGBA(color), scale);
         }
 

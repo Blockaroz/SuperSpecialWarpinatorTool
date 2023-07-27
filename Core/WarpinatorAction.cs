@@ -70,5 +70,5 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
 
     public virtual void Update(Player player) { }
 
-    public virtual void Perform(Player player) { }
+    public virtual void Perform(Player player, Item item) { }
 }

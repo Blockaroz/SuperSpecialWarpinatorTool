@@ -20,7 +20,17 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             despawn.Value = false;
         }
 
-        public override void Perform(Player player)
+        public override void Update(Player player)
+        {
+            if (Selected && !player.mouseInterface)
+            {
+                player.WarpPlayer().useSpecialCursorWireHands = true;
+                if (player.controlUseItem)
+                    player.ChangeDir(Main.MouseWorld.X > player.Center.X ? 1 : -1);
+            }
+        }
+
+        public override void Perform(Player player, Item item)
         {
             if (world.Value)
             {
@@ -51,9 +61,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>()
         {
-            new Text(Mod, "DespawnNPC"),
+            new Text(Mod, "WarpinatorMenus.Butcher.DespawnNPC"),
             new Toggle(despawn),
-            new Text(Mod, "AffectAllNPCs"),
+            new Text(Mod, "WarpinatorMenus.Butcher.AffectAllNPCs"),
             new Toggle(world),
         };
     }

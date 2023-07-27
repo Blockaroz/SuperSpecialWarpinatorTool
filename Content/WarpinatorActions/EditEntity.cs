@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SuperSpecialWarpinatorTool.Common.Systems;
 using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System;
@@ -20,20 +21,48 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         private string oldSearch;
         private Ref<string> search = new Ref<string>();
 
+        private int movedNPC;
+        private int movedProj;
+        private bool movingSomething;
+
         public override void SetDefaults()
         {
             npc.Value = null;
             search.Value = "";
         }
 
-        public override void Perform(Player player)
+        public override void Perform(Player player, Item item)
         {
-            
+            player.SetDummyItemTime(5);
+
+            if (!movingSomething)
+            {
+                if (Main.npc.Any(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())))
+                {
+                    movingSomething = true;
+                    movedNPC = Main.npc.First(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())).whoAmI;
+                }
+            }
         }
 
         public override void Update(Player player)
         {
             oldSearch = search.Value;
+
+            if (Selected && !player.mouseInterface)
+            {
+                player.WarpPlayer().useSpecialCursor = true;
+
+                if (player.controlUseItem)
+                    player.ChangeDir(Main.MouseWorld.X > player.Center.X ? 1 : -1);
+            }
+
+            if (!player.ItemAnimationActive && movingSomething)
+            {
+                movedNPC = -1;
+                movedProj = -1;
+                movingSomething = false;
+            }
         }
 
         private void RefreshFieldSearch()
@@ -52,14 +81,12 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             new PageList(new List<Page>()
             {
-                new Page(Mod, "NPCs", icons[0], new List<IWarpMenuElement>()
+                new Page(Mod, "Common.NPCs", icons[0], new List<IWarpMenuElement>()
                 {
-                    new Text(Mod, "Test", Color.Orchid, 0.5f),
                     new Selector<NPC>(npc),
                 }),
-                new Page(Mod, "Projectiles", icons[1], new List<IWarpMenuElement>()
+                new Page(Mod, "Common.Projectiles", icons[1], new List<IWarpMenuElement>()
                 {                    
-                    new Text(Mod, "Test", Color.Cyan, 0.5f),
                     new Selector<Projectile>(projectile),                   
                 }),
             })

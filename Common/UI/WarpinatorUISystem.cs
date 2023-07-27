@@ -29,22 +29,12 @@ namespace SuperSpecialWarpinatorTool.Common.UI
         {
             if (Main.LocalPlayer.WarpPlayer().actions != null)
                 WarpinatorUI.Update(gameTime);
+
+            WarpinatorInterface.SetState(WarpinatorUI.Active ? WarpinatorUI : null);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            layers.Insert(0, new LegacyGameInterfaceLayer(
-                "SuperSpecialWarpinator: Hitboxes",
-                delegate
-                {
-                    if (WarpUI.UISettings.EntityHitboxes && Main.LocalPlayer.ValidWarpinator())
-                    {
-
-                    }
-                    return true;
-                },
-                InterfaceScaleType.Game));
-
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Wire Selection"));
             if (mouseTextIndex != -1)
             {

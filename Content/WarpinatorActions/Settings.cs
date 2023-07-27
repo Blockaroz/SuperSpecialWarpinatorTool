@@ -4,6 +4,9 @@ using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameInput;
+using Terraria.Localization;
+using static SuperSpecialWarpinatorTool.Common.UI.WarpUI;
 
 namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
@@ -15,7 +18,10 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         public Ref<bool> name = new Ref<bool>();
         public Ref<bool> namePermanent = new Ref<bool>();
         public Ref<bool> selectionWires = new Ref<bool>();
-        public Ref<bool> entityHitboxes = new Ref<bool>();
+
+        private Ref<List<string>> cursorOptions = new Ref<List<string>>();
+        public Ref<int> cursorMode = new Ref<int>();
+        public Ref<bool> cursorColor = new Ref<bool>();
 
         public override void SetDefaults()
         {
@@ -23,7 +29,15 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             name.Value = true;
             namePermanent.Value = false;
             selectionWires.Value = true;
-            entityHitboxes.Value = true;
+
+            cursorOptions.Value = new List<string>
+            {
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.Default")).Value,
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.Never")).Value,
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.Always")).Value
+            };
+            cursorMode.Value = (int)OptionEnum.Default;
+            cursorColor.Value = true;
         }
 
         public override void Update(Player player)
@@ -31,21 +45,63 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             if (!name.Value)
                 name.Value |= namePermanent.Value;
 
-            WarpUI.UISettings.Lefty = lefty.Value;
-            WarpUI.UISettings.NamePerm = namePermanent.Value;
-            WarpUI.UISettings.Name = name.Value || namePermanent.Value;
-            WarpUI.UISettings.SelectionWires = selectionWires.Value;
-            WarpUI.UISettings.EntityHitboxes = entityHitboxes.Value;
+            UISettings.Lefty = lefty.Value;
+            UISettings.NamePerm = namePermanent.Value;
+            UISettings.Name = name.Value || namePermanent.Value;
+            UISettings.SelectionWires = selectionWires.Value;
+            UISettings.CursorMode = cursorMode.Value switch
+            {
+                0 => OptionEnum.Default,
+                1 => OptionEnum.Never,
+                2 => OptionEnum.Always,
+                _ => OptionEnum.Default,
+            };
+            UISettings.CursorMouseColor = cursorColor.Value;
         }
 
         public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>
         {
-            new Text(Mod, "MenuOnLeft"),
-            new Toggle(lefty),
-            new Text(Mod, "ShowName"),
+            new Text(Mod, "WarpinatorMenus.Settings.MenuOnLeft"),
+            new Toggle(lefty),            
+            new Text(Mod, "WarpinatorMenus.Settings.ShowName"),
             new Toggle(name),
-            new Text(Mod, "Permanent", Color.DarkGray, 0.66f),
-            new Toggle(namePermanent),
+            new Text(Mod, "Common.Always", Color.DarkGray, 0.66f),
+            new Toggle(namePermanent),            
+            new Text(Mod, "WarpinatorMenus.Settings.CursorSettings"),
+            new Text(Mod, "WarpinatorMenus.Settings.DisplaySpecialCursor", Color.DarkGray, 0.66f),
+            new ScrollPanel(cursorOptions, cursorMode, 60, 60),
+            new Text(Mod, "WarpinatorMenus.Settings.UseCursorColor", Color.DarkGray, 0.66f),
+            new Toggle(cursorColor),           
+            new ScrollPanel(new Ref<List<string>>()
+            {
+                Value = new List<string>()
+                {
+                    "Option 1",
+                    "Option 2",
+                    "Option 3",
+                    "Option 4",
+                    "Option 5",
+                    "Option 6",
+                    "Option 7",
+                    "Option 8",
+                    "Option 9",
+                }
+            }, new Ref<int>(), 60, 130),            
+            new ScrollPanel(new Ref<List<string>>()
+            {
+                Value = new List<string>()
+                {
+                    "Option 1",
+                    "Option 2",
+                    "Option 3",
+                    "Option 4",
+                    "Option 5",
+                    "Option 6",
+                    "Option 7",
+                    "Option 8",
+                    "Option 9",
+                }
+            }, new Ref<int>(), 60, 50),
         };
     }
 }

@@ -89,7 +89,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
     public class Page : ILocalizedModType
     {
-        public string LocalizationCategory => "WarpinatorMenuElements";
+        public string LocalizationCategory => "WarpinatorMenus";
 
         public Mod Mod { get; private set; }
 
@@ -107,7 +107,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public Page(Mod mod, string key, Texture2D icon, List<IWarpMenuElement> elements)
         {
-            pageName = Language.GetOrRegister(mod.GetLocalizationKey(LocalizationCategory + '.' + key));
+            pageName = Language.GetOrRegister(mod.GetLocalizationKey(key));
             this.icon = icon;
             this.elements = elements;
         }

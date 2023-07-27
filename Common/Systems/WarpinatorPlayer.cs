@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using SuperSpecialWarpinatorTool.Common.UI;
 using SuperSpecialWarpinatorTool.Content.WarpinatorActions;
 using SuperSpecialWarpinatorTool.Core;
 using System;
@@ -16,6 +18,9 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
         public int currentActionIndex;
 
         public WarpinatorAction CurrentAction => actions[currentActionIndex];
+
+        public bool useSpecialCursor;
+        public bool useSpecialCursorWireHands;
 
         public override void Load()
         {
@@ -46,8 +51,26 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
         {
             if (Player.HasWarpinator())
             {
-                foreach (var action in actions)
-                    action.Update(Player);
+                for (int i = 0; i < actions.Count; i++)
+                {
+                    actions[i].Selected = i == currentActionIndex;
+                    actions[i].Update(Player);
+                }
+            }
+
+            if (Player.HoldingWarpinator())
+            {
+                if (useSpecialCursorWireHands || useSpecialCursor)
+                {
+                    Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.Y / Main.screenHeight) - 0.3f - MathHelper.PiOver2) * Player.direction);
+                    Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.X / Main.screenWidth) + 0.1f - MathHelper.PiOver2) * Player.direction);
+                    VisualsSystem.UseSpecialCursorWireHands();
+                }
+                if ((useSpecialCursor && WarpUI.UISettings.CursorMode == OptionEnum.Default) || WarpUI.UISettings.CursorMode == OptionEnum.Always)
+                    VisualsSystem.UseSpecialCursor();
+
+                useSpecialCursor = WarpUI.UISettings.CursorMode == OptionEnum.Always;
+                useSpecialCursorWireHands = useSpecialCursor;
             }
         }
 

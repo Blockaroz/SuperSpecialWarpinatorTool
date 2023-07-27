@@ -1,16 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using SuperSpecialWarpinatorTool.Common.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -42,7 +31,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
         public override bool? UseItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer)
-                player.WarpPlayer().CurrentAction.Perform(player);
+                player.WarpPlayer().CurrentAction.Perform(player, Item);
 
             return true;
         }

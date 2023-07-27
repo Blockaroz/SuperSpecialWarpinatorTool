@@ -20,7 +20,8 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             public static bool Name { get; set; }
             public static bool NamePerm { get; set; }
             public static bool SelectionWires { get; set; }
-            public static bool EntityHitboxes { get; set; }
+            public static OptionEnum CursorMode { get; set; }
+            public static bool CursorMouseColor { get; set; }
         }
 
         public bool OnMyInterface;
@@ -34,9 +35,14 @@ namespace SuperSpecialWarpinatorTool.Common.UI
         private bool Usable => Open && fadeIn > 0.95f;
         private bool MenuUsable => MenuOpen && menuFadeIn > 0.95f;
 
-        public void OpenUI()
+        public bool Active => fadeIn > 0f;
+
+        public void OpenUI(bool open)
         {           
-            Open = !Open;
+            if (Open != open)
+                SoundEngine.PlaySound(open ? AssetDirectory.Sounds_UI.MenuOpen : AssetDirectory.Sounds_UI.MenuClose);
+
+            Open = open;
             if (Open)
             {
                 position = Main.MouseScreen;
@@ -44,8 +50,6 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                     position = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 
             }
-
-            SoundEngine.PlaySound(Open ? AssetDirectory.Sounds_UI.MenuOpen : AssetDirectory.Sounds_UI.MenClose);
         }
 
         private Color TextColor => Color.Lerp(new Color(180, 0, 200, 200), Color.White, Utils.GetLerpValue(0.7f, 0.85f, menuFadeIn * fadeIn, true)) * Utils.GetLerpValue(0.5f, 0.9f, menuFadeIn * fadeIn, true);
@@ -85,7 +89,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             targetRotation = -MathHelper.TwoPi / player.WarpPlayer().actions.Count * player.WarpPlayer().currentActionIndex - ((1f - fadeIn) * MathHelper.Pi * (Open ? -1 : 1) * direction);
             rotation = Utils.AngleLerp(rotation, targetRotation + (UISettings.Lefty ? 0 : MathHelper.Pi), 0.3f);
 
-            if (fadeIn > 0.96f)
+            if (fadeIn > 0.98f)
                 fadeIn = 1f;
             if (fadeIn < 0.2f && !Open)
                 fadeIn = 0f;           
@@ -98,9 +102,9 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             if (scrollCD > 0)
                 scrollCD--;
 
-            bool otherInterface = (player.mouseInterface || player.lastMouseInterface) && !OnMyInterface;
+            bool otherInterface = ((player.mouseInterface || player.lastMouseInterface) && !OnMyInterface) || Main.inFancyUI || Main.ingameOptionsWindow;
             bool condition1 = player.dead || Main.mouseItem.type > ItemID.None;
-            bool condition2 = !player.ValidWarpinator() || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1;
+            bool condition2 = !player.HoldingWarpinator() || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1;
             if (otherInterface || condition1 || condition2)
             {
                 Open = false;
@@ -110,7 +114,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             OnMyInterface = false;
 
             if (player.WarpPlayer().mouseRight && !Main.SmartInteractShowingGenuine)
-                OpenUI();
+                OpenUI(!Open);
 
             if (!Usable)
                 return;
@@ -129,7 +133,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                 position = Main.MouseScreen - dragOffset;
                 dragOffset = Vector2.Lerp(dragOffset, Vector2.Zero, 0.04f);
 
-                WarpinatorSystem.HideCursor();
+                VisualsSystem.HideCursor();
             }
 
             position = new Vector2((int)position.X, (int)position.Y);
@@ -138,7 +142,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             {
                 Vector2 actPosition = position - new Vector2((20 + 20 * fadeIn + 5 * Math.Max(player.WarpPlayer().actions.Count - 5, 0)), 0).RotatedBy((rotation + MathHelper.TwoPi / player.WarpPlayer().actions.Count * i) * direction);
                 bool innerHover = Main.MouseScreen.Distance(actPosition) < 20;
-                player.WarpPlayer().CurrentAction.Selected = false;
+
                 if (innerHover)
                 {
                     if (!oldHover)
@@ -153,9 +157,8 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                         SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuPageSelect);
                     }
 
-                    if (Player.GetMouseScrollDelta() != 0 && scrollCD == 0)
+                    if (Player.GetMouseScrollDelta() != 0)
                     {
-                        scrollCD = 2;
                         player.WarpPlayer().currentActionIndex += Player.GetMouseScrollDelta();
                         SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuPageSelect);
 
@@ -165,8 +168,6 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                             player.WarpPlayer().currentActionIndex = 0;
                     }
                 }
-
-                player.WarpPlayer().CurrentAction.Selected = player.WarpPlayer().currentActionIndex == i;
             }
 
             if (player.WarpPlayer().CurrentAction.MenuElements.Count > 0 && MenuUsable)
@@ -201,6 +202,9 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             }
 
             if (hoveringOverAnything)
+                scrollCD = 5;
+
+            if (scrollCD > 0)
                 player.WarpInterface();
         }
 
@@ -217,17 +221,18 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             if (player.WarpPlayer().CurrentAction.MenuElements.Count > 0 && menuFadeIn > 0.05f)
             {
                 Vector2 menuPos = MenuPosition;
+                
+                float height = 0;
+                for (int i = 0; i < action.MenuElements.Count; i++)
+                    height += action.MenuElements[i].Height * fadeIn;
+                
+                menuPos.Y -= height / 2f;
 
                 for (int i = 0; i < action.MenuElements.Count; i++)
                 {
-                    float height = action.MenuElements[i].Height * fadeIn;
-                    menuPos.Y -= height / 2f;
-                }
-                for (int i = 0; i < action.MenuElements.Count; i++)
-                {
-                    float height = action.MenuElements[i].Height * fadeIn;
+                    float drawHeight = action.MenuElements[i].Height * fadeIn;
                     action.MenuElements[i].Draw(spriteBatch, TextColor, player, menuPos, Main.MouseScreen, direction);
-                    menuPos.Y += height;
+                    menuPos.Y += drawHeight;
                 }
             }
 

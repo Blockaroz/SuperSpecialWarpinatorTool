@@ -15,7 +15,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.HandOnAcc);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.ValidWarpinator();
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HoldingWarpinator();
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
@@ -36,7 +36,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.OffhandAcc);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.ValidWarpinator();
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HoldingWarpinator();
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
@@ -54,7 +54,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
     {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Backpacks);
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.ValidWarpinator() && VanityUtils.NoBackpackOn(ref drawInfo);
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.HoldingWarpinator() && VanityUtils.NoBackpackOn(ref drawInfo);
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
