@@ -62,6 +62,7 @@ public struct Slider
 
         if (dragging)
         {
+            player.mouseInterface = true;
             value = Utils.GetLerpValue(0, area.Width, mousePos.X - area.X, true);
             if (!player.WarpPlayer().mouseLeftHold)
                 dragging = false;

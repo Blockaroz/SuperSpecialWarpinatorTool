@@ -71,37 +71,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             new Text(Mod, "WarpinatorMenus.Settings.DisplaySpecialCursor", Color.DarkGray, 0.66f),
             new ScrollPanel(cursorOptions, cursorMode, 60, 60),
             new Text(Mod, "WarpinatorMenus.Settings.UseCursorColor", Color.DarkGray, 0.66f),
-            new Toggle(cursorColor),           
-            new ScrollPanel(new Ref<List<string>>()
-            {
-                Value = new List<string>()
-                {
-                    "Option 1",
-                    "Option 2",
-                    "Option 3",
-                    "Option 4",
-                    "Option 5",
-                    "Option 6",
-                    "Option 7",
-                    "Option 8",
-                    "Option 9",
-                }
-            }, new Ref<int>(), 60, 130),            
-            new ScrollPanel(new Ref<List<string>>()
-            {
-                Value = new List<string>()
-                {
-                    "Option 1",
-                    "Option 2",
-                    "Option 3",
-                    "Option 4",
-                    "Option 5",
-                    "Option 6",
-                    "Option 7",
-                    "Option 8",
-                    "Option 9",
-                }
-            }, new Ref<int>(), 60, 50),
+            new Toggle(cursorColor),
         };
     }
 }

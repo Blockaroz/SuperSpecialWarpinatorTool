@@ -20,11 +20,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         private int oldHover;
         private int hovered;
 
-        private float scrollAmount;
-        private bool scrollOldHover;
-        private bool scrollHovered;
+        private ScrollBar scrollBar;
         private bool needsScrollBar;
-        private int scrollOffset;
 
         public ScrollPanel(Ref<List<string>> elements, Ref<int> selection, int width, int height, bool canSelect = true)
         {
@@ -40,18 +37,17 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            int scrollBarOffset = needsScrollBar ? 24 : 0;
+            int scrollBarOffset = needsScrollBar ? 18 : 0;
             Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[0], (int)(position.X - (direction < 0 ? width + scrollBarOffset : 0)), (int)position.Y, width + scrollBarOffset, height + 12, 10, 10, 10, 10, color);
 
-            if (needsScrollBar)
-            {
-                int scrollX = direction < 0 ? -width - scrollBarOffset + 4 : width + scrollBarOffset - 16;
-                Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[1], (int)(position.X + scrollX), (int)position.Y + 4, 12, height + 4, 4, 4, 4, 4, color);
+            int scrollX = direction < 0 ? -width - scrollBarOffset + 4 : width + scrollBarOffset - 16;
+            scrollBar.viewArea = height;
+            scrollBar.maxViewArea = elements.Value.Count * 20f;
+            scrollBar.position = new Vector2((int)position.X + scrollX, (int)position.Y + 4);
+            scrollBar.height = height + 4;
 
-                int scrollHeight = (int)((float)(height / 20f) * elements.Value.Count);
-                Color scrollColor = scrollHovered ? Color.White : Color.White * 0.85f;
-                Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.ScrollButton, (int)(position.X + scrollX), (int)(position.Y + 4 + scrollAmount * height), 12, scrollHeight, 4, 4, 4, 4, scrollColor.MultiplyRGBA(color));
-            }
+            if (needsScrollBar)
+                scrollBar.Draw(spriteBatch, color);
 
             RasterizerState priorRasterizer = spriteBatch.GraphicsDevice.RasterizerState;
             Rectangle priorScissor = spriteBatch.GraphicsDevice.ScissorRectangle;
@@ -61,7 +57,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((int)position.X + 6, (int)position.Y + 6, width - 6, height);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, WarpUtils.OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 
-            Vector2 elementPosition = position + new Vector2(10 * direction, 8);
+            Vector2 elementPosition = position + new Vector2(10 * direction, 8 - scrollBar.value);
             for (int i = 0; i < elements.Value.Count; i++)
             {
                 Vector2 off = elementPosition + new Vector2((int)(direction < 0 ? -FontAssets.MouseText.Value.MeasureString(elements.Value[i]).X * 0.66f : 0), 0);
@@ -74,83 +70,58 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             spriteBatch.GraphicsDevice.RasterizerState = priorRasterizer;
             spriteBatch.GraphicsDevice.ScissorRectangle = priorScissor;
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, priorRasterizer, null, Main.UIScaleMatrix);
-
-            Utils.DrawBorderString(spriteBatch, scrollAmount.ToString(), position + new Vector2(180, 20), color, 1f);
-
         }
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            int scrollBarOffset = needsScrollBar ? 24 : 0;
-            int scrollX = direction < 0 ? -width - scrollBarOffset + 4 : width + scrollBarOffset - 16;
-
+            int scrollBarOffset = needsScrollBar ? 18 : 0;
             Rectangle area = new Rectangle((int)position.X - (direction < 0 ? width + scrollBarOffset : 0), (int)position.Y + 6, width + scrollBarOffset, height);
             hovered = selection.Value;
             
-            Rectangle scrollArea = new Rectangle((int)position.X + scrollX, (int)position.Y + 6, 16, height - 6);
-            int scrollHeight = (int)((float)(height / (elements.Value.Count * 20f));
-            Rectangle scrollBarArea = new Rectangle((int)position.X + scrollX, (int)(position.Y + 4 + scrollAmount * height), 12, scrollHeight);
-
-            Vector2 elementPosition = position + new Vector2(10 * direction, 8);
-
-            if (needsScrollBar)
-            {
-                scrollHovered = scrollBarArea.Contains(mousePos.ToPoint());
-                if (scrollHovered && player.WarpPlayer().mouseLeftHold && !dragging)
-                {
-                    dragging = true;
-                    scrollOffset = (int)(Main.MouseScreen.Y - scrollBarArea.Y);
-                }
-
-                if (scrollBarArea.Contains(mousePos.ToPoint()) && player.WarpPlayer().mouseLeft)
-                {
-                    //scrollAmt = 
-                }
-            }
+            Vector2 elementPosition = position + new Vector2(10 * direction, 8 - scrollBar.value);
+            
+            dragging = false;
 
             if (area.Contains(mousePos.ToPoint()) && !dragging)
             {
                 player.WarpInterface();
 
-                for (int i = 0; i < elements.Value.Count; i++)
-                {
-                    Vector2 off = elementPosition + new Vector2(direction < 0 ? -width + 4 : 0, 0);
-                    Rectangle elementArea = new Rectangle((int)off.X, (int)off.Y, width, 20);
-                    if (elementArea.Contains(mousePos.ToPoint()))
-                    {
-                        hovered = i;
-                        if (player.WarpPlayer().mouseLeft)
-                            selection.Value = i;
-                    }
+                if (Player.GetMouseScrollDelta() != 0)
+                    scrollBar.value -= Player.GetMouseScrollDelta() * 20;
 
-                    elementPosition.Y += 20;
+                if (!scrollBar.hoverArea)
+                {
+                    for (int i = 0; i < elements.Value.Count; i++)
+                    {
+                        Vector2 off = elementPosition + new Vector2(direction < 0 ? -width + 4 : 0, 0);
+                        Rectangle elementArea = new Rectangle((int)off.X, (int)off.Y, width, 20);
+                        if (elementArea.Contains(mousePos.ToPoint()) && canSelect)
+                        {
+                            hovered = i;
+                            if (player.WarpPlayer().mouseLeft)
+                            {
+                                selection.Value = i;
+                                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTickSelect);
+                            }
+                        }
+                        elementPosition.Y += 20;
+                    }
                 }
+            }
+
+            if (needsScrollBar)
+            {
+                scrollBar.Update(player, mousePos, dragging);
+                if (scrollBar.hoverArea)
+                    player.WarpInterface();
+                if (scrollBar.moving)
+                    dragging = true;
             }
 
             if (dragging)
-            {
                 player.WarpInterface();
 
-                float pos = Main.MouseScreen.Y - scrollBarArea.Y - scrollOffset;
-                scrollAmount = MathHelper.Clamp(pos / height * (elements.Value.Count * 20), 0, elements.Value.Count * 20 - height);
-                if (!player.WarpPlayer().mouseLeftHold)
-                {
-                    scrollHovered = false;
-                    dragging = false;
-                    scrollOffset = 0;
-                }
-            }
-
-            scrollAmount = MathHelper.Clamp(scrollAmount, 0f, 1f);
-
-            if (scrollHovered && !scrollOldHover)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
-
-            if (hovered > -1 && oldHover != hovered)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
-
             oldHover = hovered;
-            scrollOldHover = scrollHovered;
         }
     }
 }

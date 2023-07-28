@@ -61,7 +61,7 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
             orig(gameTime);
 
-            Vector2 handPos = (Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)) - Main.screenPosition) / Main.UIScale;
+            Vector2 handPos = Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)).ToScreenPosition();
 
             if (popitRope == null)
                 popitRope = new Rope(handPos, Main.MouseScreen, 30, 10f, Vector2.Zero, 0.04f, 5);
@@ -102,19 +102,19 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
         private void DrawCursor(On_Main.orig_DrawInterface_36_Cursor orig)
         {
+            Texture2D line = TextureAssets.BlackTile.Value;
+
+            float thicknessFix = 1.3f / Main.UIScale * Main.GameZoomTarget;
+
+            if (specialCursor || specialCursorWireHands)
+            {
+                Vector2 backHandPos = Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)).ToScreenPosition();
+                Vector2 frontHandPos = Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeFrontArm.rotation)).ToScreenPosition();
+                Vector2 interHandLength = new Vector2(thicknessFix, backHandPos.Distance(frontHandPos) / 1.33f);
+                Main.spriteBatch.Draw(line, backHandPos, new Rectangle(0, 0, 2, 1), WarpUtils.WarpColor(), backHandPos.AngleTo(frontHandPos) - MathHelper.PiOver2, Vector2.UnitX, interHandLength, 0, 0);
+            }
             if (drawCursor)
             {
-                Texture2D line = TextureAssets.BlackTile.Value;
-
-                float thicknessFix = 1.3f / Main.UIScale * Main.GameZoomTarget;
-
-                if (specialCursor || specialCursorWireHands)
-                {
-                    Vector2 backHandPos = (Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)) - Main.screenPosition) / Main.UIScale;
-                    Vector2 frontHandPos = (Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeFrontArm.rotation)) - Main.screenPosition) / Main.UIScale;
-                    Vector2 interHandLength = new Vector2(thicknessFix, backHandPos.Distance(frontHandPos) / 2f - 3f);
-                    Main.spriteBatch.Draw(line, backHandPos, new Rectangle(0, 0, 2, 2), WarpUtils.WarpColor(), backHandPos.AngleTo(frontHandPos) - MathHelper.PiOver2, Vector2.UnitX, interHandLength, 0, 0);
-                }
                 if (specialCursor)
                 {
                     Texture2D texture = AssetDirectory.Textures_UI.SelectorCursor;
@@ -146,7 +146,6 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
                 }
                 else
                     orig();
-
             }
         }
     }
