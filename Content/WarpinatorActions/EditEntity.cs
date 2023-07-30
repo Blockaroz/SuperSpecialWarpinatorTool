@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SuperSpecialWarpinatorTool.Common.Systems;
-using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
+using SuperSpecialWarpinatorTool.Content.MenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         private int movedNPC;
         private int movedProj;
         private bool movingSomething;
+        private Vector2 offset;
 
         public override void SetDefaults()
         {
@@ -33,14 +34,28 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override void Perform(Player player, Item item)
         {
-            player.SetDummyItemTime(5);
+            item.useTime = 2;
+            item.useAnimation = 2;
 
             if (!movingSomething)
             {
+                movedNPC = -1;
+                movedProj = -1;
+
                 if (Main.npc.Any(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())))
                 {
                     movingSomething = true;
                     movedNPC = Main.npc.First(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())).whoAmI;
+                    offset = Main.MouseWorld - Main.npc[movedNPC].Center;
+                    return;
+                }
+
+                if (Main.projectile.Any(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())))
+                {
+                    movingSomething = true;
+                    movedProj = Main.projectile.First(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())).whoAmI;
+                    offset = Main.MouseWorld - Main.projectile[movedProj].Center;
+                    return;
                 }
             }
         }
@@ -55,6 +70,28 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
                 if (player.controlUseItem)
                     player.ChangeDir(Main.MouseWorld.X > player.Center.X ? 1 : -1);
+            }
+
+            offset = Vector2.Lerp(offset, Vector2.Zero, 0.1f);
+
+            if (movingSomething)
+            {
+                if (movedNPC > -1)
+                {
+                    if (npc.Value == null)
+                        npc.Value = Main.npc[movedNPC];
+
+                    else
+                        npc.Value.Center = Main.MouseWorld + offset;
+                }
+                if (movedProj > -1)
+                {
+                    if (projectile.Value == null)
+                        projectile.Value = Main.projectile[movedProj];
+
+                    else
+                        projectile.Value.Center = Main.MouseWorld + offset;
+                }
             }
 
             if (!player.ItemAnimationActive && movingSomething)
@@ -77,17 +114,17 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             icons = new Texture2D[2];
         }
 
-        public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>()
+        public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>()
         {
             new PageList(new List<Page>()
             {
-                new Page(Mod, "Common.NPCs", icons[0], new List<IWarpMenuElement>()
+                new Page(Mod, "Common.NPCs", icons[0], new List<IMenuElement>()
                 {
-                    new Selector<NPC>(npc),
+                    new EntitySelector<NPC>(npc, Main.npc)
                 }),
-                new Page(Mod, "Common.Projectiles", icons[1], new List<IWarpMenuElement>()
+                new Page(Mod, "Common.Projectiles", icons[1], new List<IMenuElement>()
                 {                    
-                    new Selector<Projectile>(projectile),                   
+                    new EntitySelector<Projectile>(projectile, Main.projectile)
                 }),
             })
         };

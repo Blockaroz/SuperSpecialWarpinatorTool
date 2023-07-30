@@ -24,10 +24,11 @@ public struct ScrollBar
 
     public void Draw(SpriteBatch spriteBatch, Color color)
     {
-        Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[1], (int)position.X, (int)position.Y, 12, height, 4, 4, 4, 4, color);
+        WarpUtils.DrawThinPanel(spriteBatch, (int)position.X, (int)position.Y, 12, height, color);
 
         float scrollHeight = viewArea / maxViewArea * height;
         Color scrollColor = hoverBar ? Color.White : Color.White * 0.85f;
+
         Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.ScrollButton, (int)position.X, (int)(position.Y + height * (value / maxViewArea)), 12, (int)scrollHeight, 4, 4, 4, 4, scrollColor.MultiplyRGBA(color));
     }
 

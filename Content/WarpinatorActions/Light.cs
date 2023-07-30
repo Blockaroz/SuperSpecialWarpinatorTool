@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SuperSpecialWarpinatorTool.Common.UI;
-using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
+using SuperSpecialWarpinatorTool.Content.MenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
                 Lighting.AddLight(player.Center, lightColor.Value.ToVector3());
         }
 
-        public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>()            
+        public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>()            
         {       
             new Text(Mod, "Common.Enabled"),
             new Toggle(enabled),

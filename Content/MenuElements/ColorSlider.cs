@@ -6,11 +6,11 @@ using SuperSpecialWarpinatorTool.Core;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using static SuperSpecialWarpinatorTool.Content.WarpMenuElements.ColorSlider;
+using static SuperSpecialWarpinatorTool.Content.MenuElements.ColorSlider;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class ColorSlider : IWarpMenuElement
+    public class ColorSlider : IMenuElement
     {
         private Ref<Color> colorValue;
 
@@ -33,6 +33,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             sliders[1].value = Main.rgbToHsl(colorValue.Value).Y;
             sliders[2].value = Main.rgbToHsl(colorValue.Value).Z;
         }
+
+        public int Width => 178;
 
         public int Height => 55;
 

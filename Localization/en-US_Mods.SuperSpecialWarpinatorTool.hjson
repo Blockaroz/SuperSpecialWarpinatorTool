@@ -23,6 +23,7 @@ WarpinatorActions: {
 WarpinatorMenus: {
 	Settings: {
 		MenuOnLeft: Menu on left side
+		MenuBackBoxes: Show menu boxes
 		ShowName: Show tool name
 		CursorSettings: Cursor Settings
 		DisplaySpecialCursor: Use special cursor

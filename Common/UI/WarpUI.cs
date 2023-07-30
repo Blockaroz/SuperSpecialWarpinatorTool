@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SuperSpecialWarpinatorTool.Common.Systems;
+using SuperSpecialWarpinatorTool.Content.MenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -17,9 +19,10 @@ namespace SuperSpecialWarpinatorTool.Common.UI
         public static class UISettings
         {
             public static bool Lefty { get; set; }
+            public static bool BackBox { get; set; }
             public static bool Name { get; set; }
             public static bool NamePerm { get; set; }
-            public static bool SelectionWires { get; set; }
+            public static bool ShowCursorWires { get; set; }
             public static OptionEnum CursorMode { get; set; }
             public static bool CursorMouseColor { get; set; }
         }
@@ -52,7 +55,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             }
         }
 
-        private Color TextColor => Color.Lerp(new Color(180, 0, 200, 200), Color.White, Utils.GetLerpValue(0.7f, 0.85f, menuFadeIn * fadeIn, true)) * Utils.GetLerpValue(0.5f, 0.9f, menuFadeIn * fadeIn, true);
+        private Color MenuFadeColor => Color.Lerp(new Color(180, 0, 200, 200), Color.White, Utils.GetLerpValue(0.7f, 0.85f, menuFadeIn * fadeIn, true)) * Utils.GetLerpValue(0.5f, 0.9f, menuFadeIn * fadeIn, true);
 
         private Vector2 position;
 
@@ -220,18 +223,27 @@ namespace SuperSpecialWarpinatorTool.Common.UI
 
             if (player.WarpPlayer().CurrentAction.MenuElements.Count > 0 && menuFadeIn > 0.05f)
             {
+                bool paged = action.MenuElements.Any(n => n is IDoNotDrawBackBox);
+
                 Vector2 menuPos = MenuPosition;
                 
                 float height = 0;
+                float width = 0;
                 for (int i = 0; i < action.MenuElements.Count; i++)
+                {
                     height += action.MenuElements[i].Height * fadeIn;
-                
+                    width = Math.Max(width, action.MenuElements[i].Width);
+                }
+
                 menuPos.Y -= height / 2f;
+
+                if (UISettings.BackBox && !paged)
+                    WarpUtils.DrawPanel(spriteBatch, (int)menuPos.X - 10 - (int)(direction < 0 ? width : 0), (int)menuPos.Y - 10, (int)width + 20, (int)height + 20, MenuFadeColor);
 
                 for (int i = 0; i < action.MenuElements.Count; i++)
                 {
                     float drawHeight = action.MenuElements[i].Height * fadeIn;
-                    action.MenuElements[i].Draw(spriteBatch, TextColor, player, menuPos, Main.MouseScreen, direction);
+                    action.MenuElements[i].Draw(spriteBatch, MenuFadeColor, player, menuPos, Main.MouseScreen, direction);
                     menuPos.Y += drawHeight;
                 }
             }

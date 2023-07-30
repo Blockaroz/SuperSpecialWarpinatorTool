@@ -6,9 +6,9 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class Toggle : IWarpMenuElement
+    public class Toggle : IMenuElement
     {
         public Ref<bool> condition;
 
@@ -19,7 +19,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             this.condition = condition;
         }
 
-        public int Height => 25;
+        public int Width => 48;
+
+        public int Height => 24;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {

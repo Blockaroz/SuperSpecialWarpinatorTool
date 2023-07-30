@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SuperSpecialWarpinatorTool.Common.UI;
 using SuperSpecialWarpinatorTool.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -11,9 +12,9 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class PageList : IWarpMenuElement
+    public class PageList : IMenuElement, IDoNotDrawBackBox
     {
         private List<Page> pages;
 
@@ -30,12 +31,14 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
                 height += page.Height;
         }
 
+        public int Width => 12;
+
         public int Height => (int)(height * (0.5f + WarpinatorUISystem.WarpinatorUI.GetMenuFadeIn * 0.5f / WarpinatorUISystem.WarpinatorUI.GetFadeIn));
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
             pages[activePage].Draw(spriteBatch, color, player, position + new Vector2(35 * direction, 0), mousePos, direction);
-
+           
             Vector2 buttonPos = position + new Vector2(6 * direction, 11);
             foreach (Page page in pages)
             {
@@ -97,7 +100,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         public string FullName => GetType().FullName;
 
-        public List<IWarpMenuElement> elements;
+        public List<IMenuElement> elements;
 
         public readonly Texture2D icon;
 
@@ -105,7 +108,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         internal bool active;
 
-        public Page(Mod mod, string key, Texture2D icon, List<IWarpMenuElement> elements)
+        public Page(Mod mod, string key, Texture2D icon, List<IMenuElement> elements)
         {
             pageName = Language.GetOrRegister(mod.GetLocalizationKey(key));
             this.icon = icon;
@@ -118,13 +121,23 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         {
             if (active)
             {
+                float width = 0f;
+                float height = 0f;
                 Vector2 menuPos = position;
-                foreach (IWarpMenuElement element in elements)
-                    menuPos.Y -= (int)(element.Height / 2f);
-                foreach (IWarpMenuElement element in elements)
+                foreach (IMenuElement element in elements)
+                {
+                    height += element.Height * WarpinatorUISystem.WarpinatorUI.GetMenuFadeIn * WarpinatorUISystem.WarpinatorUI.GetFadeIn;
+                    width = Math.Max(width, element.Width);
+                }
+
+                menuPos.Y -= height / 2f;
+                if (WarpUI.UISettings.BackBox)
+                    WarpUtils.DrawPanel(spriteBatch, (int)menuPos.X - 10, (int)menuPos.Y - 10, (int)width + 20, (int)height + 20, color);
+
+                foreach (IMenuElement element in elements)
                 {
                     element.Draw(spriteBatch, color, player, menuPos, mousePos, direction);
-                    menuPos.Y += element.Height;
+                    menuPos.Y += element.Height * WarpinatorUISystem.WarpinatorUI.GetMenuFadeIn * WarpinatorUISystem.WarpinatorUI.GetFadeIn;
                 }
             }
         }
@@ -134,9 +147,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             if (active)
             {
                 Vector2 menuPos = position;
-                foreach (IWarpMenuElement element in elements)
+                foreach (IMenuElement element in elements)
                     menuPos.Y -= (int)(element.Height / 2f);
-                foreach (IWarpMenuElement element in elements)
+                foreach (IMenuElement element in elements)
                 {
                     element.Update(player, menuPos, mousePos, direction);
                     menuPos.Y += element.Height;

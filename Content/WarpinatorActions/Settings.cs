@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using SuperSpecialWarpinatorTool.Common.UI;
-using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
+using SuperSpecialWarpinatorTool.Content.MenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System.Collections.Generic;
 using Terraria;
@@ -15,6 +15,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         public override bool HasPerformableAction => false;
 
         public Ref<bool> lefty = new Ref<bool>();
+        public Ref<bool> backBox = new Ref<bool>();
         public Ref<bool> name = new Ref<bool>();
         public Ref<bool> namePermanent = new Ref<bool>();
         public Ref<bool> selectionWires = new Ref<bool>();
@@ -46,9 +47,10 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
                 name.Value |= namePermanent.Value;
 
             UISettings.Lefty = lefty.Value;
+            UISettings.BackBox = backBox.Value;
             UISettings.NamePerm = namePermanent.Value;
             UISettings.Name = name.Value || namePermanent.Value;
-            UISettings.SelectionWires = selectionWires.Value;
+            UISettings.ShowCursorWires = selectionWires.Value;
             UISettings.CursorMode = cursorMode.Value switch
             {
                 0 => OptionEnum.Default,
@@ -59,10 +61,12 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             UISettings.CursorMouseColor = cursorColor.Value;
         }
 
-        public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>
+        public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>
         {
             new Text(Mod, "WarpinatorMenus.Settings.MenuOnLeft"),
             new Toggle(lefty),            
+            new Text(Mod, "WarpinatorMenus.Settings.MenuBackBoxes"),
+            new Toggle(backBox),            
             new Text(Mod, "WarpinatorMenus.Settings.ShowName"),
             new Toggle(name),
             new Text(Mod, "Common.Always", Color.DarkGray, 0.66f),

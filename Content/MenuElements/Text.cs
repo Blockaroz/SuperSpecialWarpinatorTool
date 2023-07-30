@@ -12,9 +12,9 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class Text : IWarpMenuElement, ILocalizedModType
+    public class Text : IMenuElement, ILocalizedModType
     {
         public string LocalizationCategory => "WarpinatorMenus";
 
@@ -23,8 +23,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         public string Name => GetType().Name;
 
         public string FullName => GetType().FullName;
-
-        public int Height => (int)(25 * (scale < 1f ? (0.5f + scale * 0.5f) : scale));
 
         private readonly LocalizedText text;
 
@@ -38,6 +36,10 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             this.drawColor = drawColor.HasValue ? drawColor.Value : Color.White;
             this.scale = scale;
         }
+
+        public int Width => (int)(FontAssets.MouseText.Value.MeasureString(text.Value).X * scale + 2);
+
+        public int Height => (int)(25 * (0.33f + scale * 0.66f));
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {

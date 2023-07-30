@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SuperSpecialWarpinatorTool.Common.UI;
 using SuperSpecialWarpinatorTool.Core;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class ScrollPanel : IWarpMenuElement
+    public class ScrollPanel : IMenuElement
     {
         private Ref<List<string>> elements;
         private Ref<int> selection;
@@ -17,7 +18,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
         private int height;
         private bool dragging;
         private bool canSelect;
-        private int oldHover;
         private int hovered;
 
         private ScrollBar scrollBar;
@@ -33,12 +33,14 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             needsScrollBar = elements.Value.Count * 20 > height;
         }
 
+        public int Width => width;
+
         public int Height => height + 16;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
             int scrollBarOffset = needsScrollBar ? 18 : 0;
-            Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[0], (int)(position.X - (direction < 0 ? width + scrollBarOffset : 0)), (int)position.Y, width + scrollBarOffset, height + 12, 10, 10, 10, 10, color);
+            WarpUtils.DrawPanel(spriteBatch, (int)(position.X - (direction < 0 ? width + scrollBarOffset : 0)), (int)position.Y, width + scrollBarOffset, height + 12, color);
 
             int scrollX = direction < 0 ? -width - scrollBarOffset + 4 : width + scrollBarOffset - 16;
             scrollBar.viewArea = height;
@@ -120,8 +122,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
             if (dragging)
                 player.WarpInterface();
-
-            oldHover = hovered;
         }
     }
 }

@@ -13,9 +13,9 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameInput;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class TextBox : IWarpMenuElement
+    public class TextBox : IMenuElement
     {
         private Ref<string> text;
 
@@ -27,6 +27,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
 
         private InputType inputType;
 
+        private int width;
+
         public TextBox(Ref<string> text, InputType inputType = InputType.Text)
         {
             this.text = text;
@@ -34,9 +36,9 @@ namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
             this.inputType = inputType;
         }
 
-        public int Height => 24;
+        public int Width => width;
 
-        private int width;
+        public int Height => 24;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {

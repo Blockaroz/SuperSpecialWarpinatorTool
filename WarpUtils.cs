@@ -5,10 +5,10 @@ using SuperSpecialWarpinatorTool.Common.UI;
 using SuperSpecialWarpinatorTool.Content.Items;
 using SuperSpecialWarpinatorTool.Core;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Terraria;
-using Terraria.GameInput;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace SuperSpecialWarpinatorTool
 {
@@ -20,6 +20,7 @@ namespace SuperSpecialWarpinatorTool
 
         public static bool HoldingWarpinator(this Player player) => player.HeldItem.type == WarpinatorID;
         public static bool HasWarpinator(this Player player) => player.HasItem(WarpinatorID);
+        public static bool HasAction<T>(this Player Player) where T : WarpinatorAction => Player.WarpPlayer().actions.Any(n => n is T);
 
         public static void WarpInterface(this Player player, bool condition = true)
         {
@@ -28,12 +29,15 @@ namespace SuperSpecialWarpinatorTool
             VisualsSystem.StopHotbar();
         } 
 
+        public static void DrawPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[0], x, y, width, height, 10, 10, 10, 10, color);
+        public static void DrawThinPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[1], x, y, width, height, 8, 8, 8, 8, color);
+
+
         public static int WarpinatorID => ModContent.ItemType<SuperSpecialWarpinator>();
 
         public static Vector2 MouseVelocity;
         public static Vector2 MouseScreenOld;
-
-        public static bool shakingMouse;
+        public static bool MouseShaking;
 
         public static readonly RasterizerState OverflowHiddenRasterizerState = new RasterizerState
         {
@@ -62,23 +66,24 @@ namespace SuperSpecialWarpinatorTool
 
     public class MouseShakeSystem : ModSystem
     {
-        private int shakeCounter;
-        private static Vector2 mouseScreenOlder;
+        private float shakeCounter;
+        private static Vector2 mouseOlder;
 
         public override void PostUpdateEverything()
         {
-            WarpUtils.MouseVelocity = (Main.MouseScreen - WarpUtils.MouseScreenOld);
+            Vector2 olderVelocity = WarpUtils.MouseScreenOld - mouseOlder;
+            WarpUtils.MouseVelocity = Main.MouseScreen - WarpUtils.MouseScreenOld;
 
-            Vector2 accel = (WarpUtils.MouseScreenOld - Main.MouseScreen) - (WarpUtils.MouseScreenOld - mouseScreenOlder);
+            float amt = Vector2.Dot(olderVelocity, WarpUtils.MouseVelocity);
+            if (amt < 0)
+                shakeCounter += Math.Abs(amt) * 0.1f;
 
-            if (accel.Length() > 70)
-                shakeCounter++;
-            else
-                shakeCounter -= 3;
+            WarpUtils.MouseShaking = shakeCounter > 60;
 
-            shakeCounter = Math.Clamp(shakeCounter, 0, 8);
+            shakeCounter--;
+            shakeCounter = MathHelper.Clamp(shakeCounter, 0f, 61f);
 
-            mouseScreenOlder = WarpUtils.MouseScreenOld;
+            mouseOlder = WarpUtils.MouseScreenOld;
             WarpUtils.MouseScreenOld = Main.MouseScreen;
         }
     }

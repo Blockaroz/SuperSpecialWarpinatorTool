@@ -8,10 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 
-namespace SuperSpecialWarpinatorTool.Content.WarpMenuElements
+namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class StickyNoteBoard : IWarpMenuElement
+    public class StickyNoteBoard : IMenuElement, IDoNotDrawBackBox
     {
+        public StickyNoteBoard()
+        {
+
+        }
+
+        public int Width => 20;
+
         public int Height => 20;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)

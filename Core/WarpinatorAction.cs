@@ -34,9 +34,9 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
 
     public bool Selected { get; internal set; }
 
-    public List<IWarpMenuElement> MenuElements { get; private set; }
+    public List<IMenuElement> MenuElements { get; private set; }
 
-    public virtual List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>();
+    public virtual List<IMenuElement> AddMenuElements() => new List<IMenuElement>();
 
     public WarpinatorAction NewInstance() => (WarpinatorAction)MemberwiseClone();
 
@@ -51,6 +51,8 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
 
         SetDefaults();
         MenuElements = AddMenuElements();
+
+        ModTypeLookup<WarpinatorAction>.Register(this);
 
         SuperSpecialWarpinatorTool.actions.Add(Name, this);
     }

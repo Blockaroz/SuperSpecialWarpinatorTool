@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using SuperSpecialWarpinatorTool.Content.WarpMenuElements;
+using SuperSpecialWarpinatorTool.Content.MenuElements;
 using SuperSpecialWarpinatorTool.Core;
 using System;
 using System.Collections.Generic;
@@ -59,7 +59,7 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             }
         }
 
-        public override List<IWarpMenuElement> AddMenuElements() => new List<IWarpMenuElement>()
+        public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>()
         {
             new Text(Mod, "WarpinatorMenus.Butcher.DespawnNPC"),
             new Toggle(despawn),
