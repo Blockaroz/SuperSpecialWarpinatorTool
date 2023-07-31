@@ -12,6 +12,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
     public class Butcher : WarpinatorAction
     {
+        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/Butcher";
+
         public Ref<bool> despawn = new Ref<bool>();
         public Ref<bool> world = new Ref<bool>();
 

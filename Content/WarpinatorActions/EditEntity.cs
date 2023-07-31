@@ -15,8 +15,11 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
     public class EditEntity : WarpinatorAction
     {
-        private Ref<NPC> npc = new Ref<NPC>();
-        private Ref<Projectile> projectile = new Ref<Projectile>();
+        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/EditEntity";
+
+        private Ref<bool> shakeToButcher = new Ref<bool>();
+        private Ref<int> npc = new Ref<int>();
+        private Ref<int> projectile = new Ref<int>();
 
         private string oldSearch;
         private Ref<string> search = new Ref<string>();
@@ -28,15 +31,14 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override void SetDefaults()
         {
-            npc.Value = null;
+            shakeToButcher.Value = false;
+            npc.Value = -1;
+            projectile.Value = -1;
             search.Value = "";
         }
 
         public override void Perform(Player player, Item item)
         {
-            item.useTime = 2;
-            item.useAnimation = 2;
-
             if (!movingSomething)
             {
                 movedNPC = -1;
@@ -77,21 +79,11 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             if (movingSomething)
             {
                 if (movedNPC > -1)
-                {
-                    if (npc.Value == null)
-                        npc.Value = Main.npc[movedNPC];
+                    Main.npc[movedNPC].Center = Main.MouseWorld + offset;
 
-                    else
-                        npc.Value.Center = Main.MouseWorld + offset;
-                }
                 if (movedProj > -1)
-                {
-                    if (projectile.Value == null)
-                        projectile.Value = Main.projectile[movedProj];
+                    Main.projectile[movedProj].Center = Main.MouseWorld + offset;
 
-                    else
-                        projectile.Value.Center = Main.MouseWorld + offset;
-                }
             }
 
             if (!player.ItemAnimationActive && movingSomething)
@@ -107,24 +99,17 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         }
 
-        public static Texture2D[] icons;
-
-        public override void OnLoad(Mod mod)
-        {
-            icons = new Texture2D[2];
-        }
-
         public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>()
         {
             new PageList(new List<Page>()
             {
-                new Page(Mod, "Common.NPCs", icons[0], new List<IMenuElement>()
+                new Page(Mod, "Common.NPCs", AssetDirectory.Textures_UI.Pages.NPCs, new List<IMenuElement>()
                 {
-                    new EntitySelector<NPC>(npc, Main.npc)
+                    new EntitySelector<NPC>(npc, ref Main.npc)
                 }),
-                new Page(Mod, "Common.Projectiles", icons[1], new List<IMenuElement>()
+                new Page(Mod, "Common.Projectiles", AssetDirectory.Textures_UI.Pages.Projectiles, new List<IMenuElement>()
                 {                    
-                    new EntitySelector<Projectile>(projectile, Main.projectile)
+                    new EntitySelector<Projectile>(projectile, ref Main.projectile)
                 }),
             })
         };

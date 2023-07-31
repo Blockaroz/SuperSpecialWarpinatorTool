@@ -25,14 +25,20 @@ WarpinatorMenus: {
 		MenuOnLeft: Menu on left side
 		MenuBackBoxes: Show menu boxes
 		ShowName: Show tool name
-		CursorSettings: Cursor Settings
+		TileGrid: Show tile grid
 		DisplaySpecialCursor: Use special cursor
 		UseCursorColor: Use cursor color
+		ShowCursorWires: Show cursor wires
 	}
 
 	Butcher: {
 		DespawnNPC: Despawn NPC
 		AffectAllNPCs: Affect all NPCs
+	}
+
+	Pages: {
+		MenuSettings: Menu Settings
+		CursorSettings: Cursor Settings
 	}
 }
 

@@ -22,7 +22,9 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             public static bool BackBox { get; set; }
             public static bool Name { get; set; }
             public static bool NamePerm { get; set; }
-            public static bool ShowCursorWires { get; set; }
+            public static bool TileGrid { get; set; }
+
+            public static bool CursorWires { get; set; }
             public static OptionEnum CursorMode { get; set; }
             public static bool CursorMouseColor { get; set; }
         }
@@ -33,19 +35,23 @@ namespace SuperSpecialWarpinatorTool.Common.UI
 
         public bool MenuOpen { get; set; }
 
+        public bool DisableOpenAndClose { get; set; }
+
         private int direction => UISettings.Lefty ? -1 : 1;
 
-        private bool Usable => Open && fadeIn > 0.95f;
-        private bool MenuUsable => MenuOpen && menuFadeIn > 0.95f;
+        public bool Usable => Open && fadeIn > 0.95f;
+        public bool MenuUsable => MenuOpen && menuFadeIn > 0.95f;
 
         public bool Active => fadeIn > 0f;
 
         public void OpenUI(bool open)
-        {           
+        {
             if (Open != open)
                 SoundEngine.PlaySound(open ? AssetDirectory.Sounds_UI.MenuOpen : AssetDirectory.Sounds_UI.MenuClose);
 
-            Open = open;
+            if (!DisableOpenAndClose)
+                Open = open;
+
             if (Open)
             {
                 position = Main.MouseScreen;
@@ -116,8 +122,10 @@ namespace SuperSpecialWarpinatorTool.Common.UI
 
             OnMyInterface = false;
 
-            if (player.WarpPlayer().mouseRight && !Main.SmartInteractShowingGenuine)
+            if (player.WarpPlayer().mouseRight && !Main.SmartInteractShowingGenuine && !DisableOpenAndClose)
                 OpenUI(!Open);
+
+            DisableOpenAndClose = false;
 
             if (!Usable)
                 return;
@@ -285,6 +293,13 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                 Vector2 namePosition = position + new Vector2(-(40 + 40 * fade + 5 * Math.Max(player.WarpPlayer().actions.Count - 5, 0) + (direction > 0 ? FontAssets.MouseText.Value.MeasureString(name).X : 0)) * direction, -10);
                 Utils.DrawBorderString(spriteBatch, name, namePosition, Color.Lerp(new Color(180, 0, 200, 200), Color.White, Utils.GetLerpValue(0.7f, 0.85f, fade, true)) * Utils.GetLerpValue(0.5f, 0.9f, fade, true), 1f);
             }
+        }
+
+        public static void DrawTileGrid(SpriteBatch spriteBatch)
+        {
+            Texture2D texture = TextureAssets.CursorRadial.Value;
+            Vector2 position = new Vector2((int)(Main.MouseWorld.X / 16f) * 16 + 8, (int)(Main.MouseWorld.Y / 16f) * 16 + 8) - Main.screenPosition;
+            spriteBatch.Draw(texture, position, texture.Frame(), Color.White * 0.3f, 0f, texture.Size() * 0.5f, 1f, 0, 0);
         }
     }
 }

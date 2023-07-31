@@ -46,7 +46,18 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                             WarpinatorInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
-                    InterfaceScaleType.UI));
+                    InterfaceScaleType.UI));                
+                
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "SuperSpecialWarpinator: Tile Grid",
+                    delegate 
+                    {
+                        if (WarpUI.UISettings.TileGrid)
+                            WarpUI.DrawTileGrid(Main.spriteBatch);
+
+                        return true;
+                    },
+                    InterfaceScaleType.Game));
             }
         }
     }

@@ -59,7 +59,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             if (hovering && player.WarpPlayer().mouseLeft)
             {
                 condition.Value = !condition.Value;
-                SoundEngine.PlaySound(condition.Value ? AssetDirectory.Sounds_UI.MenuTickSelect : AssetDirectory.Sounds_UI.MenuTickSelectOff);
+                SoundEngine.PlaySound(condition.Value ? AssetDirectory.Sounds_UI.MenuTickSelect : AssetDirectory.Sounds_UI.MenuTickDeselect);
             }
 
             oldHover = hovering;

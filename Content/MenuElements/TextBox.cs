@@ -42,6 +42,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
+
             if (text.Value == null)
                 text.Value = "";
 

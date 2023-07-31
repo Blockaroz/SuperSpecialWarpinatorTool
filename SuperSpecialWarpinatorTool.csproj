@@ -8,8 +8,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\Textures\UI\CommonPages\Info.png" />
-    <None Remove="Assets\Textures\UI\CommonPages\Settings.png" />
+    <None Remove="Assets\Textures\UI\Pages\Cursor.png" />
+    <None Remove="Assets\Textures\UI\Pages\Info.png" />
+    <None Remove="Assets\Textures\UI\Pages\NPCs.png" />
+    <None Remove="Assets\Textures\UI\Pages\Projectiles.png" />
+    <None Remove="Assets\Textures\UI\Pages\Settings.png" />
     <None Remove="Assets\Textures\Player\PageButton_0.png" />
     <None Remove="Assets\Textures\Player\PageButton_1.png" />
     <None Remove="Assets\Textures\UI\HitboxIndicator_0.png" />
@@ -17,6 +20,7 @@
     <None Remove="Assets\Textures\UI\ScrollButton.png" />
     <None Remove="Assets\Textures\UI\SelectorButton.png" />
     <None Remove="Assets\Textures\UI\SelectorCursor.png" />
+    <None Remove="Assets\Textures\UI\SpecialCursor.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_0.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_1.png" />
     <None Remove="Content\Items\SuperSpecialWarpinator_Tank.png" />

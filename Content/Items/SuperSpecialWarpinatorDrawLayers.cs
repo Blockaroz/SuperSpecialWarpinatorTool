@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SuperSpecialWarpinatorTool.Common.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace SuperSpecialWarpinatorTool.Content.Items
@@ -19,6 +21,16 @@ namespace SuperSpecialWarpinatorTool.Content.Items
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            if (drawInfo.drawPlayer.WarpPlayer().useSpecialCursorWireHands)
+            {
+                Texture2D line = TextureAssets.BlackTile.Value;
+                float thicknessFix = 1.3f;// / Main.UIScale * Main.GameZoomTarget;
+                Vector2 backHandPos = drawInfo.drawPlayer.RotatedRelativePoint(drawInfo.drawPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)) - Main.screenPosition;
+                Vector2 frontHandPos = drawInfo.drawPlayer.RotatedRelativePoint(drawInfo.drawPlayer.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeFrontArm.rotation)) - Main.screenPosition;
+                Vector2 interHandLength = new Vector2(thicknessFix, frontHandPos.Distance(backHandPos)  + 1);
+                drawInfo.DrawDataCache.Add(new DrawData(line, frontHandPos, new Rectangle(0, 0, 2, 1), WarpUtils.WarpColor(), frontHandPos.AngleTo(backHandPos) - MathHelper.PiOver2, Vector2.UnitX, interHandLength, 0, 0));
+            }
+
             Texture2D texture = AssetDirectory.Textures_Player.WarpinatorHandsOn;
 
             Vector2 position = drawInfo.BodyPosition() + drawInfo.frontShoulderOffset + VanityUtils.GetCompositeOffset_FrontArm(ref drawInfo);
@@ -60,7 +72,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
         {
             Texture2D backpackTexture = AssetDirectory.Textures_Player.WarpinatorTank;
 
-            Vector2 vec5 = drawInfo.BodyPosition() + new Vector2(-15 * drawInfo.drawPlayer.direction, -3 * drawInfo.drawPlayer.gravDir);
+            Vector2 vec5 = drawInfo.BodyPosition() + new Vector2(-14 * drawInfo.drawPlayer.direction, -4 * drawInfo.drawPlayer.gravDir);
             vec5 = vec5.Floor();
             vec5.ApplyVerticalOffset(drawInfo);
 

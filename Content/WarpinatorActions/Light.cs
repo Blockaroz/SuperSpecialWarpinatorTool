@@ -16,6 +16,8 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
     public class Light : WarpinatorAction
     {
+        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/Light";
+
         public Ref<bool> enabled = new Ref<bool>();
 
         public Ref<Color> lightColor = new Ref<Color>();

@@ -65,7 +65,6 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
                 {
                     Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.Y / Main.screenHeight) - 0.3f - MathHelper.PiOver2) * Player.direction);
                     Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.X / Main.screenWidth) + 0.1f - MathHelper.PiOver2) * Player.direction);
-                    VisualsSystem.UseSpecialCursorWireHands();
                 }
                 if ((useSpecialCursor && WarpUI.UISettings.CursorMode == OptionEnum.Default) || WarpUI.UISettings.CursorMode == OptionEnum.Always)
                     VisualsSystem.UseSpecialCursor();

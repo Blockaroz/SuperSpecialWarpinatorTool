@@ -7,6 +7,8 @@ namespace SuperSpecialWarpinatorTool.Content.Items
 {
     public class SuperSpecialWarpinator : ModItem
     {
+        public override string Texture => AssetDirectory.TexturePath + "Items/SuperSpecialWarpinator";
+
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[Type] = true;
@@ -18,8 +20,8 @@ namespace SuperSpecialWarpinatorTool.Content.Items
             Item.width = 28;
             Item.height = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = 10;
-            Item.useTime = 10;
+            Item.useAnimation = 2;
+            Item.useTime = 2;
             Item.channel = true;
             Item.noMelee = true;
             Item.noUseGraphic = true;

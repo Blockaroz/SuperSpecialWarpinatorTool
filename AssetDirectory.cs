@@ -34,15 +34,20 @@ public readonly record struct AssetDirectory
 
         public static TextureAsset SelectorCursor = new TextureAsset(TexturePath + "UI/SelectorCursor");
 
+        public static TextureAsset SpecialCursor = new TextureAsset(TexturePath + "UI/SpecialCursor");
+
         public static TextureAsset Slider = new TextureAsset(TexturePath + "UI/SliderBar");
         public static TextureAsset SliderButton = new TextureAsset(TexturePath + "UI/SliderButton");
 
         public static TextureAsset ScrollButton = new TextureAsset(TexturePath + "UI/ScrollButton");
 
-        public struct CommonPages
+        public struct Pages
         {
-            public static TextureAsset Settings = new TextureAsset(TexturePath + "UI/CommonPages/Settings");
-            public static TextureAsset Info = new TextureAsset(TexturePath + "UI/CommonPages/Info");
+            public static TextureAsset Settings = new TextureAsset(TexturePath + "UI/Pages/Settings");
+            public static TextureAsset Info = new TextureAsset(TexturePath + "UI/Pages/Info");
+            public static TextureAsset NPCs = new TextureAsset(TexturePath + "UI/Pages/NPCs");
+            public static TextureAsset Projectiles = new TextureAsset(TexturePath + "UI/Pages/Projectiles");
+            public static TextureAsset Cursor = new TextureAsset(TexturePath + "UI/Pages/Cursor");
         }
     }
 
@@ -57,7 +62,7 @@ public readonly record struct AssetDirectory
     {
         public static SoundStyle MenuTick = new SoundStyle(SoundPath + "UI/MenuTick") with { MaxInstances = 0, PitchVariance = 0.1f };
         public static SoundStyle MenuTickSelect = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0 };
-        public static SoundStyle MenuTickSelectOff = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0, Pitch = -0.25f };
+        public static SoundStyle MenuTickDeselect = new SoundStyle(SoundPath + "UI/MenuTickDeselect") with { MaxInstances = 0 };
 
         public static SoundStyle MenuPageSelect = new SoundStyle(SoundPath + "UI/MenuPageSelect") with { MaxInstances = 0 };
 
@@ -66,5 +71,8 @@ public readonly record struct AssetDirectory
         
         public static SoundStyle MenuSmallOpen = new SoundStyle(SoundPath + "UI/MenuSmallOpen") with { MaxInstances = 0 };
         public static SoundStyle MenuSmallClose = new SoundStyle(SoundPath + "UI/MenuSmallClose") with { MaxInstances = 0 };
+
+        public static SoundStyle HookEntity = new SoundStyle(SoundPath + "UI/MenuTickSelect") with { MaxInstances = 0 };
+        public static SoundStyle UnhookEntity = new SoundStyle(SoundPath + "UI/MenuTickDeselect") with { MaxInstances = 0 };
     }
 }

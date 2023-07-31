@@ -37,7 +37,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            pages[activePage].Draw(spriteBatch, color, player, position + new Vector2(35 * direction, 0), mousePos, direction);
+            pages[activePage].Draw(spriteBatch, color, player, position + new Vector2(35 * direction, Height / 2), mousePos, direction);
            
             Vector2 buttonPos = position + new Vector2(6 * direction, 11);
             foreach (Page page in pages)
@@ -56,7 +56,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            pages[activePage].Update(player, position + new Vector2(35 * direction, 0), mousePos, direction);
+            pages[activePage].Update(player, position + new Vector2(35 * direction, Height / 2), mousePos, direction);
 
             bool hovering = false;
             Vector2 buttonPos = position + new Vector2(6 * direction, 11);
@@ -132,7 +132,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
                 menuPos.Y -= height / 2f;
                 if (WarpUI.UISettings.BackBox)
-                    WarpUtils.DrawPanel(spriteBatch, (int)menuPos.X - 10, (int)menuPos.Y - 10, (int)width + 20, (int)height + 20, color);
+                    WarpUtils.DrawPanel(spriteBatch, (int)menuPos.X - 10 - (int)(direction < 0 ? width : 0), (int)menuPos.Y - 10, (int)width + 20, (int)height + 20, color);
 
                 foreach (IMenuElement element in elements)
                 {
