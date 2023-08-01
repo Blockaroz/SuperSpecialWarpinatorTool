@@ -21,7 +21,7 @@ public class LoopingSound
     {
         bool active = SoundEngine.TryGetActiveSound(slot, out ActiveSound activeSound);
 
-        if (!active || !slot.IsValid)
+        if ((!active || !slot.IsValid) && condition.Invoke())
         {
             slot = SoundEngine.PlaySound(style, position.Invoke(), sound =>
             {

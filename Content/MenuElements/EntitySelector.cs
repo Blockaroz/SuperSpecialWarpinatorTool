@@ -43,7 +43,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             int boxWidth = Width - 22;
             Vector2 offsetPosition = position + new Vector2(direction < 0 ? -Width : 0, 0);
             WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X, (int)offsetPosition.Y, Width, Height, color);
-            WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X, (int)offsetPosition.Y, boxWidth, Height, color);
+            WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X + (direction < 0 ? 22 : 0), (int)offsetPosition.Y, boxWidth, Height, color);
 
             if (!WarpinatorUISystem.WarpinatorUI.MenuUsable)
                 cursorRope = null;
@@ -65,7 +65,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, WarpUtils.OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 
                 string text = typeof(T).Name + " " + values[selection.Value].whoAmI + ":" + selectionData;
-                Utils.DrawBorderString(spriteBatch, text, offsetPosition + new Vector2(6 + direction < 0 ? (int)(FontAssets.MouseText.Value.MeasureString(text).X * 0.66f) : 0, 6), color, 0.66f);
+                Utils.DrawBorderString(spriteBatch, text, offsetPosition + new Vector2(8 + (direction < 0 ? 22 : 0), 6), color, 0.66f);
 
                 spriteBatch.End();
                 spriteBatch.GraphicsDevice.RasterizerState = priorRasterizer;
@@ -125,10 +125,12 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
+            Vector2 offsetPosition = position + new Vector2(direction < 0 ? -Width : 0, 0);
+
             int boxWidth = Width - 22;
             Vector2 buttonPos = position + new Vector2((Width - 14) * direction, Height / 2);
 
-            Rectangle area = new Rectangle((int)position.X, (int)position.Y, Width, Height);
+            Rectangle area = new Rectangle((int)offsetPosition.X, (int)offsetPosition.Y, Width, Height);
             bool hovered = area.Contains(mousePos.ToPoint());
             if (hovered && !dragging)
             {

@@ -66,6 +66,11 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             oldSearch = search.Value;
 
+            if (npc.Value > -1)
+            {
+                //Main.NewText(player.GetSource_CatchEntity(Main.npc[npc.Value]).ToString());
+            }
+
             if (Selected && !player.mouseInterface)
             {
                 player.WarpPlayer().useSpecialCursor = true;

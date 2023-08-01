@@ -21,6 +21,8 @@
     <None Remove="Assets\Textures\UI\SelectorButton.png" />
     <None Remove="Assets\Textures\UI\SelectorCursor.png" />
     <None Remove="Assets\Textures\UI\SpecialCursor.png" />
+    <None Remove="Assets\Textures\UI\Warpinator_Toggle_0.png" />
+    <None Remove="Assets\Textures\UI\Warpinator_Toggle_1.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_0.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_1.png" />
     <None Remove="Content\Items\SuperSpecialWarpinator_Tank.png" />
@@ -30,5 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Textures\NPCs\" />
+    <Folder Include="Content\NPCs\" />
   </ItemGroup>
 </Project>
