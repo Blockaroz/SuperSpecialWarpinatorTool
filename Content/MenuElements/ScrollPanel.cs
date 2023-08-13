@@ -59,7 +59,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((int)position.X + 6, (int)position.Y + 6, width - 6, height);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, WarpUtils.OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 
-            Vector2 elementPosition = position + new Vector2(10 * direction, 8 - scrollBar.value);
+            Vector2 elementPosition = position + new Vector2(8 * direction, 8 - scrollBar.value);
             for (int i = 0; i < elements.Value.Count; i++)
             {
                 Vector2 off = elementPosition + new Vector2((int)(direction < 0 ? -FontAssets.MouseText.Value.MeasureString(elements.Value[i]).X * 0.66f : 0), 0);
@@ -88,7 +88,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             {
                 player.WarpInterface();
 
-                if (Player.GetMouseScrollDelta() != 0)
+                if (needsScrollBar && Player.GetMouseScrollDelta() != 0)
                     scrollBar.value -= Player.GetMouseScrollDelta() * 20;
 
                 if (!scrollBar.hoverArea)
@@ -103,13 +103,15 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                             if (player.WarpPlayer().mouseLeft)
                             {
                                 selection.Value = i;
-                                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTickSelect);
+                                SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTickSelect);
                             }
                         }
                         elementPosition.Y += 20;
                     }
                 }
             }
+
+            selection.Value = Math.Clamp(selection.Value, 0, elements.Value.Count - 1);
 
             if (needsScrollBar)
             {

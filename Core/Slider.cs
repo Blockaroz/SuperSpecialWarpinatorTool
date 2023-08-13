@@ -16,8 +16,8 @@ public struct Slider
 
     public void DrawSlider(SpriteBatch spriteBatch, Color color, Color barColor, bool gradient = false, bool rainbow = false)
     {
-        Texture2D texture = AssetDirectory.Textures_UI.Slider;
-        Texture2D buttonTexture = AssetDirectory.Textures_UI.SliderButton;
+        Texture2D texture = AssetDirectory.Textures.Slider;
+        Texture2D buttonTexture = AssetDirectory.Textures.SliderButton;
         Rectangle baseFrame = texture.Frame(1, 4, 0, 0);
         Rectangle hoverFrame = texture.Frame(1, 4, 0, 0);
         Rectangle colorFrame = texture.Frame(1, 4, 0, rainbow ? 3 : 2);
@@ -44,7 +44,7 @@ public struct Slider
         {
             hovered = true;
             if (!oldHovered)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
 
             if (player.WarpPlayer().mouseLeftHold)
             {

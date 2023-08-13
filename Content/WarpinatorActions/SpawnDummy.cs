@@ -10,10 +10,8 @@ using Terraria;
 
 namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
-    public class Butcher : WarpinatorAction
+    public class SpawnDummy : WarpinatorAction
     {
-        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/Butcher";
-
         public Ref<bool> despawn = new Ref<bool>();
         public Ref<bool> world = new Ref<bool>();
 
@@ -63,10 +61,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override List<IMenuElement> AddMenuElements() => new List<IMenuElement>()
         {
-            new Text(Mod, "WarpinatorMenus.Butcher.DespawnNPC"),
-            new Toggle(despawn),
-            new Text(Mod, "WarpinatorMenus.Butcher.AffectAllNPCs"),
-            new Toggle(world),
         };
     }
 }

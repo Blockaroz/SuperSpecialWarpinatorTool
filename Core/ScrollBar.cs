@@ -29,7 +29,7 @@ public struct ScrollBar
         float scrollHeight = viewArea / maxViewArea * height;
         Color scrollColor = hoverBar ? Color.White : Color.White * 0.85f;
 
-        Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.ScrollButton, (int)position.X, (int)(position.Y + height * (value / maxViewArea)), 12, (int)scrollHeight, 4, 4, 4, 4, scrollColor.MultiplyRGBA(color));
+        Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures.ScrollButton, (int)position.X, (int)(position.Y + height * (value / maxViewArea)), 12, (int)scrollHeight, 4, 4, 4, 4, scrollColor.MultiplyRGBA(color));
     }
 
     public void Update(Player player, Vector2 mousePos, bool alreadyDragging, bool withSound = true)
@@ -79,7 +79,7 @@ public struct ScrollBar
         value = MathHelper.Clamp(value, 0f, maxViewArea - viewArea);
 
         if (hoverBar && !oldHoverBar && withSound)
-            SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+            SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
 
         oldHoverArea = hoverArea;
         oldHoverBar = hoverBar;

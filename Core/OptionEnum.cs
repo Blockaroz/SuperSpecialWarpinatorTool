@@ -13,6 +13,7 @@ namespace SuperSpecialWarpinatorTool.Core
         Always,
         Hovered,
         None,
-        All
+        All,
+        WhileHeld,
     }    
 }

@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace SuperSpecialWarpinatorTool
 {
@@ -29,8 +28,8 @@ namespace SuperSpecialWarpinatorTool
             VisualsSystem.StopHotbar();
         } 
 
-        public static void DrawPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[0], x, y, width, height, 10, 10, 10, 10, color);
-        public static void DrawThinPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures_UI.WarpPanel[1], x, y, width, height, 8, 8, 8, 8, color);
+        public static void DrawPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color, bool hovered = false) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures.WarpPanel[hovered ? 1 : 0], x, y, width, height, 10, 10, 10, 10, color);
+        public static void DrawThinPanel(SpriteBatch spriteBatch, int x, int y, int width, int height, Color color, bool hovered = false) => Utils.DrawSplicedPanel(spriteBatch, AssetDirectory.Textures.WarpPanel[hovered ? 3 : 2], x, y, width, height, 8, 8, 8, 8, color);
 
 
         public static int WarpinatorID => ModContent.ItemType<SuperSpecialWarpinator>();
@@ -45,21 +44,35 @@ namespace SuperSpecialWarpinatorTool
             ScissorTestEnable = true
         };
 
+        public static Rectangle GetHoveredHitbox(Vector2 position)
+        {
+            Rectangle box = new Rectangle(0, 0, 0, 0);
+            foreach (Projectile projectile in Main.projectile.Where(n => n.active && n.Hitbox.Contains(position.ToPoint())))
+                box = projectile.Hitbox;
+
+            foreach (NPC nPC in Main.npc.Where(n => n.active && n.Hitbox.Contains(position.ToPoint())))
+                box = nPC.Hitbox;
+
+            return box;
+        }
+
         public static void DrawRectangleIndicator(SpriteBatch spritebatch, Rectangle rectangle, bool cursorColor)
         {
-            Texture2D texture = AssetDirectory.Textures_UI.HitboxIndicator[cursorColor ? 1 : 0];
+            Texture2D texture = AssetDirectory.Textures.HitboxIndicator[cursorColor ? 1 : 0];
             Color drawColor = cursorColor ? Main.MouseBorderColor : Color.White;
 
-            Vector2 right = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, right - Main.screenPosition, texture.Frame(), drawColor, 0, texture.Size() * 0.5f, 1f, 0, 0);            
-            
-            Vector2 left = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            int offset = 5 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 5) * 3);
+
+            Vector2 right = new Vector2(rectangle.X + rectangle.Width + offset, rectangle.Y + rectangle.Height / 2);
+            spritebatch.Draw(texture, right - Main.screenPosition, texture.Frame(), drawColor, 0, texture.Size() * 0.5f, 1f, 0, 0);
+
+            Vector2 left = new Vector2(rectangle.X - offset, rectangle.Y + rectangle.Height / 2);
             spritebatch.Draw(texture, left - Main.screenPosition, texture.Frame(), drawColor, 0, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);            
             
-            Vector2 top = new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
-            spritebatch.Draw(texture, top - Main.screenPosition, texture.Frame(), drawColor, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);            
-            
-            Vector2 bottom = new Vector2(rectangle.X, rectangle.Y + rectangle.Height / 2 + (int)(MathF.Sin(Main.GlobalTimeWrappedHourly * 30) * 6));
+            Vector2 top = new Vector2(rectangle.X + rectangle.Width / 2, rectangle.Y - offset);
+            spritebatch.Draw(texture, top - Main.screenPosition, texture.Frame(), drawColor, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, 0, 0);
+
+            Vector2 bottom = new Vector2(rectangle.X + rectangle.Width / 2, rectangle.Y + rectangle.Height + offset);
             spritebatch.Draw(texture, bottom - Main.screenPosition, texture.Frame(), drawColor, -MathHelper.PiOver2, texture.Size() * 0.5f, 1f, SpriteEffects.FlipHorizontally, 0);
         }
     }

@@ -7,7 +7,7 @@ namespace SuperSpecialWarpinatorTool.Content.Items
 {
     public class SuperSpecialWarpinator : ModItem
     {
-        public override string Texture => AssetDirectory.TexturePath + "Items/SuperSpecialWarpinator";
+        public override string Texture => Mod.Name + "/Assets/Textures/Items/SuperSpecialWarpinator";
 
         public override void SetStaticDefaults()
         {

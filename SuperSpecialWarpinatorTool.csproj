@@ -8,8 +8,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Textures\UI\Pages\Butcher.png" />
     <None Remove="Assets\Textures\UI\Pages\Cursor.png" />
     <None Remove="Assets\Textures\UI\Pages\Info.png" />
+    <None Remove="Assets\Textures\UI\Pages\Menu.png" />
     <None Remove="Assets\Textures\UI\Pages\NPCs.png" />
     <None Remove="Assets\Textures\UI\Pages\Projectiles.png" />
     <None Remove="Assets\Textures\UI\Pages\Settings.png" />
@@ -25,6 +27,9 @@
     <None Remove="Assets\Textures\UI\Warpinator_Toggle_1.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_0.png" />
     <None Remove="Assets\Textures\UI\WarpPanel_1.png" />
+    <None Remove="Assets\Textures\UI\WarpPanel_2.png" />
+    <None Remove="Assets\Textures\UI\WarpPanel_3.png" />
+    <None Remove="Assets\Textures\WarpinatorActions\SpawnDummy.png" />
     <None Remove="Content\Items\SuperSpecialWarpinator_Tank.png" />
     <None Remove="Content\WarpinatorActions\EditEntity.png" />
     <None Remove="Content\WarpinatorActions\Notepad.png" />

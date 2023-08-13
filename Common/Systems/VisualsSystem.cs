@@ -27,6 +27,18 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
         {
             orig();
 
+            Rectangle hitBox = WarpUtils.GetHoveredHitbox(Main.MouseWorld);
+
+            if (WarpUI.UISettings.Hitboxes == OptionEnum.All)
+            {
+                foreach (Projectile projectile in Main.projectile.Where(n => n.active))
+                    WarpUtils.DrawRectangleIndicator(Main.spriteBatch, projectile.Hitbox, WarpUI.UISettings.CursorMouseColor);
+
+                foreach (NPC nPC in Main.npc.Where(n => n.active))
+                    WarpUtils.DrawRectangleIndicator(Main.spriteBatch, nPC.Hitbox, WarpUI.UISettings.CursorMouseColor);
+            }
+            else if (WarpUI.UISettings.Hitboxes == OptionEnum.Hovered && hitBox.Size().Length() > 2)
+                WarpUtils.DrawRectangleIndicator(Main.spriteBatch, hitBox, WarpUI.UISettings.CursorMouseColor);
         }
 
         private void StopHotbarHandling(On_Player.orig_HandleHotbar orig, Player self)
@@ -61,7 +73,7 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
             orig(gameTime);
 
-            Vector2 handPos = Main.LocalPlayer.RotatedRelativePoint(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)).ToScreenPosition();
+            Vector2 handPos = Main.LocalPlayer.RotatedRelativePointOld(Main.LocalPlayer.GetBackHandPosition(Player.CompositeArmStretchAmount.Full, Main.LocalPlayer.compositeBackArm.rotation)).ToScreenPosition();
 
             if (specialCursorRope == null)
                 specialCursorRope = new Rope(handPos, Main.MouseScreen, 30, 10f, Vector2.Zero, 0.04f, 5);
@@ -104,7 +116,7 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
             {
                 if (specialCursor && !Main.mapFullscreen)
                 {
-                    Texture2D texture = AssetDirectory.Textures_UI.SpecialCursor;
+                    Texture2D texture = AssetDirectory.Textures.SpecialCursor;
                     Rectangle colorFrame = texture.Frame(2, 1, 0);
                     Rectangle highlightFrame = texture.Frame(2, 1, 1);
 

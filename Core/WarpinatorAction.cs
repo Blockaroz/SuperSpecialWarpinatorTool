@@ -26,7 +26,7 @@ public abstract class WarpinatorAction : ILocalizedModType, ILoadable
 
     public LocalizedText DisplayName { get; private set; }
 
-    public virtual string Texture => (GetType().Namespace + "." + Name).Replace('.', '/');
+    public virtual string Texture => $"{Mod.Name}/Assets/Textures/WarpinatorActions/" + Name;
 
     private protected Texture2D iconTexture;
 

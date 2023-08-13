@@ -44,7 +44,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             {
                 bool hoveringOrActive = mousePos.Distance(buttonPos) < 13 || page.active;
 
-                Texture2D texture = AssetDirectory.Textures_UI.PageButton[hoveringOrActive ? 1 : 0];
+                Texture2D texture = AssetDirectory.Textures.PageButton[hoveringOrActive ? 1 : 0];
                 spriteBatch.Draw(texture, buttonPos, texture.Frame(), color, 0, texture.Size() * 0.5f, 1f, 0, 0);
 
                 if (page.icon != null)
@@ -73,7 +73,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
                     if (player.WarpPlayer().mouseLeft)
                     {
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTickSelect);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTickSelect);
                         activePage = i;
                     }
                 }
@@ -84,7 +84,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             }
 
             if (hovering && !oldHover)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+                SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
 
             oldHover = hovering;
         }

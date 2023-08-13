@@ -12,15 +12,19 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
     public class Settings : WarpinatorAction
     {
-        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/Settings";
-
         public override bool HasPerformableAction => false;
+
+        public Ref<bool> tileGrid = new Ref<bool>();
+
+        public Ref<bool> visual = new Ref<bool>();
+
+        private Ref<List<string>> hitBoxOptions = new Ref<List<string>>();
+        public Ref<int> hitBoxes = new Ref<int>();
 
         public Ref<bool> lefty = new Ref<bool>();
         public Ref<bool> backBox = new Ref<bool>();
         public Ref<bool> name = new Ref<bool>();
         public Ref<bool> namePermanent = new Ref<bool>();
-        public Ref<bool> tileGrid = new Ref<bool>();
 
         private Ref<List<string>> cursorOptions = new Ref<List<string>>();
         public Ref<int> cursorMode = new Ref<int>();
@@ -29,11 +33,20 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 
         public override void SetDefaults()
         {
+            visual.Value = false;
+            hitBoxOptions.Value = new List<string>
+            {
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.None")).Value,
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.Hovered")).Value,
+                Language.GetOrRegister(Mod.GetLocalizationKey("Common.All")).Value
+            };
+            hitBoxes.Value = (int)OptionEnum.Default;
+            tileGrid.Value = false;
+
             lefty.Value = false;
             backBox.Value = false;
             name.Value = true;
             namePermanent.Value = false;
-            tileGrid.Value = false;
 
             cursorOptions.Value = new List<string>
             {
@@ -51,19 +64,30 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
             if (!name.Value)
                 name.Value |= namePermanent.Value;
 
+            UISettings.Hitboxes = hitBoxes.Value switch
+            {
+                0 => OptionEnum.None,
+                1 => OptionEnum.Hovered,
+                2 => OptionEnum.All,
+                _ => OptionEnum.Hovered,
+            };
+            UISettings.TileGrid = tileGrid.Value;
+            player.WarpPlayer().alwaysShowVisuals = visual.Value;
+
             UISettings.Lefty = lefty.Value;
             UISettings.BackBox = backBox.Value;
             UISettings.NamePerm = namePermanent.Value;
             UISettings.Name = name.Value || namePermanent.Value;
-            UISettings.TileGrid = tileGrid.Value;
+
             UISettings.CursorWires = cursorWires.Value;
             UISettings.CursorMode = cursorMode.Value switch
             {
-                0 => OptionEnum.Default,
+                0 => OptionEnum.WhileHeld,
                 1 => OptionEnum.Never,
                 2 => OptionEnum.Always,
-                _ => OptionEnum.Default,
+                _ => OptionEnum.WhileHeld,
             };
+            UISettings.CursorMouseColor = cursorColor.Value;
             UISettings.CursorMouseColor = cursorColor.Value;
         }
 
@@ -71,7 +95,20 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
         {
             new PageList(new List<Page>()
             {
-                new Page(Mod, "WarpinatorMenus.Pages.MenuSettings", AssetDirectory.Textures_UI.Pages.Settings, new List<IMenuElement>()
+                new Page(Mod, "WarpinatorMenus.Pages.GeneralSettings", AssetDirectory.Textures.Pages.Settings, new List<IMenuElement>()
+                {
+                    new Text(Mod, "WarpinatorMenus.Settings.Hitboxes"),
+                    new ScrollPanel(hitBoxOptions, hitBoxes, 60, 60),
+                    new Text(Mod, "WarpinatorMenus.Settings.TileGrid"),
+                    new Toggle(tileGrid),
+                    new Text(Mod, "WarpinatorMenus.Settings.AlwaysShowVisual"),
+                    new Toggle(visual),
+                }),                     
+                new Page(Mod, "WarpinatorMenus.Pages.ToolSettings", AssetDirectory.Textures.Pages.Settings, new List<IMenuElement>()
+                {
+
+                }),                       
+                new Page(Mod, "WarpinatorMenus.Pages.MenuSettings", AssetDirectory.Textures.Pages.Menu, new List<IMenuElement>()
                 {
                     new Text(Mod, "WarpinatorMenus.Settings.MenuOnLeft"),
                     new Toggle(lefty),
@@ -81,16 +118,14 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
                     new Toggle(name),
                     new Text(Mod, "Common.Always", Color.DarkGray, 0.66f),
                     new Toggle(namePermanent),                    
-                    new Text(Mod, "WarpinatorMenus.Settings.TileGrid"),
-                    new Toggle(tileGrid),
                 }),                
-                new Page(Mod, "WarpinatorMenus.Pages.CursorSettings", AssetDirectory.Textures_UI.Pages.Cursor, new List<IMenuElement>()
+                new Page(Mod, "WarpinatorMenus.Pages.CursorSettings", AssetDirectory.Textures.Pages.Cursor, new List<IMenuElement>()
                 {
-                    new Text(Mod, "WarpinatorMenus.Settings.DisplaySpecialCursor", Color.DarkGray, 0.66f),
+                    new Text(Mod, "WarpinatorMenus.Settings.DisplaySpecialCursor"),
                     new ScrollPanel(cursorOptions, cursorMode, 60, 60),
-                    new Text(Mod, "WarpinatorMenus.Settings.UseCursorColor", Color.DarkGray, 0.66f),
+                    new Text(Mod, "WarpinatorMenus.Settings.UseCursorColor"),
                     new Toggle(cursorColor),                    
-                    new Text(Mod, "WarpinatorMenus.Settings.ShowCursorWires", Color.DarkGray, 0.66f),
+                    new Text(Mod, "WarpinatorMenus.Settings.ShowCursorWires"),
                     new Toggle(cursorWires),
                 }),
             })

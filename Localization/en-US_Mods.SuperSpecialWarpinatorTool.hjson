@@ -18,6 +18,8 @@ WarpinatorActions: {
 	EditEntity: Move/Edit Entity
 	Notepad: Notepad
 	TestAction: Test Action
+	EditNPC: Edit NPC
+	SpawnDummy: Spawn Dummy
 }
 
 WarpinatorMenus: {
@@ -29,16 +31,21 @@ WarpinatorMenus: {
 		DisplaySpecialCursor: Use special cursor
 		UseCursorColor: Use cursor color
 		ShowCursorWires: Show cursor wires
-	}
-
-	Butcher: {
-		DespawnNPC: Despawn NPC
-		AffectAllNPCs: Affect all NPCs
+		Hitboxes: Show Hitboxes
+		AlwaysShowVisual: Always show visuals
 	}
 
 	Pages: {
 		MenuSettings: Menu Settings
 		CursorSettings: Cursor Settings
+		GeneralSettings: General Settings
+		ToolSettings: Tool Settings
+		ButcherSettings: Butcher Settings
+	}
+
+	Butcher: {
+		ShakeToButcher: Shake to butcher
+		DespawnNPC: Despawn NPC instead
 	}
 }
 
@@ -49,9 +56,13 @@ Common: {
 	Hovered: Hovered
 	None: None
 	All: All
+	WhileHeld: While Held
 	NPCs: NPCs
 	Projectiles: Projectiles
 	Enabled: Enabled
 	Color: Color
 	Information: Information
+	Butcher: Butcher
+	Edit: Edit
+	ToolSettings: Mods.SuperSpecialWarpinatorTool.Common.ToolSettings
 }

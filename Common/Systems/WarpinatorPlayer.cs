@@ -22,6 +22,7 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
         public bool useSpecialCursor;
         public bool useSpecialCursorWireHands;
+        public bool alwaysShowVisuals;
 
         public override void Load()
         {
@@ -34,12 +35,13 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
             {
                 SuperSpecialWarpinatorTool.ActionType<Settings>(),
                 SuperSpecialWarpinatorTool.ActionType<Light>(),
-                SuperSpecialWarpinatorTool.ActionType<Butcher>(),
-                SuperSpecialWarpinatorTool.ActionType<EditEntity>(),
+                SuperSpecialWarpinatorTool.ActionType<SpawnDummy>(),
+                SuperSpecialWarpinatorTool.ActionType<EditNPC>(),
                 SuperSpecialWarpinatorTool.ActionType<Notepad>(),
             };
 
             WarpinatorIO.Load(Player);
+            WarpinatorIO.Save(Player);
         }
 
         private void SaveSettings(On_Player.orig_SavePlayer orig, PlayerFileData playerFile, bool skipMapSave)
@@ -50,6 +52,8 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
 
         public override void PostUpdate()
         {
+            useSpecialCursorWireHands = useSpecialCursor;
+
             if (Player.HasWarpinator())
             {
                 for (int i = 0; i < actions.Count; i++)
@@ -66,14 +70,24 @@ namespace SuperSpecialWarpinatorTool.Common.Systems
                     Player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.Y / Main.screenHeight) - 0.3f - MathHelper.PiOver2) * Player.direction);
                     Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, ((Main.MouseScreen.X / Main.screenWidth) + 0.1f - MathHelper.PiOver2) * Player.direction);
                 }
+
                 if ((useSpecialCursor && WarpUI.UISettings.CursorMode == OptionEnum.Default) || WarpUI.UISettings.CursorMode == OptionEnum.Always)
                 {
                     useSpecialCursorWireHands = true;
                     VisualsSystem.UseSpecialCursor();
                 }
+            }
 
-                useSpecialCursor = WarpUI.UISettings.CursorMode == OptionEnum.Always;
-                useSpecialCursorWireHands = useSpecialCursor;
+            useSpecialCursor = WarpUI.UISettings.CursorMode == OptionEnum.Always;
+        }
+
+        public override void FrameEffects()
+        {
+            if (Player.HoldingWarpinator() || (alwaysShowVisuals && Player.HasWarpinator()))
+            {
+                Player.handon = -1;
+                Player.handoff = -1;
+                Player.backpack = -1;
             }
         }
 

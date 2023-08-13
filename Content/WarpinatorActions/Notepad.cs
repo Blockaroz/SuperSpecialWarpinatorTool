@@ -7,8 +7,6 @@ namespace SuperSpecialWarpinatorTool.Content.WarpinatorActions
 {
     public class Notepad : WarpinatorAction, IDoNotAutosave
     {
-        public override string Texture => AssetDirectory.TexturePath + "WarpinatorActions/Notepad";
-
         public override void SetDefaults()
         {
         }

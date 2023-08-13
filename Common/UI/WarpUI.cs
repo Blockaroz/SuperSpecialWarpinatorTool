@@ -18,11 +18,13 @@ namespace SuperSpecialWarpinatorTool.Common.UI
     {
         public static class UISettings
         {
+            public static OptionEnum Hitboxes { get; set; }
+            public static bool TileGrid { get; set; }
+
             public static bool Lefty { get; set; }
             public static bool BackBox { get; set; }
             public static bool Name { get; set; }
             public static bool NamePerm { get; set; }
-            public static bool TileGrid { get; set; }
 
             public static bool CursorWires { get; set; }
             public static OptionEnum CursorMode { get; set; }
@@ -47,7 +49,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
         public void OpenUI(bool open)
         {
             if (Open != open)
-                SoundEngine.PlaySound(open ? AssetDirectory.Sounds_UI.MenuOpen : AssetDirectory.Sounds_UI.MenuClose);
+                SoundEngine.PlaySound(open ? AssetDirectory.Sounds.MenuOpen : AssetDirectory.Sounds.MenuClose);
 
             if (!DisableOpenAndClose)
                 Open = open;
@@ -157,7 +159,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                 if (innerHover)
                 {
                     if (!oldHover)
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
                     Main.instance.MouseTextHackZoom(player.WarpPlayer().actions[i].DisplayName.Value);
                     Main.mouseText = true;
 
@@ -165,13 +167,13 @@ namespace SuperSpecialWarpinatorTool.Common.UI
                     if (player.WarpPlayer().mouseLeft)
                     {
                         player.WarpPlayer().currentActionIndex = i;
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuPageSelect);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.MenuPageSelect);
                     }
 
                     if (Player.GetMouseScrollDelta() != 0)
                     {
                         player.WarpPlayer().currentActionIndex += Player.GetMouseScrollDelta();
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuPageSelect);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.MenuPageSelect);
 
                         if (player.WarpPlayer().currentActionIndex < 0)
                             player.WarpPlayer().currentActionIndex = player.WarpPlayer().actions.Count - 1;
@@ -199,17 +201,17 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             }
 
             if (HoveringOverMenuArrow && !oldHover)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick.WithVolumeScale(0.7f));
+                SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick.WithVolumeScale(0.7f));
 
             if (HoveringOverDragButton && !oldHover)
-                SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick.WithVolumeScale(0.7f));
+                SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick.WithVolumeScale(0.7f));
 
             oldHover = hoveringOverAnything;
 
             if (HoveringOverMenuArrow && player.WarpPlayer().mouseLeft)
             {
                 MenuOpen = !MenuOpen;
-                SoundEngine.PlaySound(MenuOpen ? AssetDirectory.Sounds_UI.MenuSmallOpen : AssetDirectory.Sounds_UI.MenuSmallClose);
+                SoundEngine.PlaySound(MenuOpen ? AssetDirectory.Sounds.MenuSmallOpen : AssetDirectory.Sounds.MenuSmallClose);
             }
 
             if (hoveringOverAnything)
@@ -259,17 +261,17 @@ namespace SuperSpecialWarpinatorTool.Common.UI
             //Draw drag button in center
 
             float dragScale = Utils.GetLerpValue(0f, 0.7f, fadeIn, true) * (dragging ? 1.1f : 0.9f);
-            spriteBatch.Draw(AssetDirectory.Textures_UI.DragButton[0], position, AssetDirectory.Textures_UI.DragButton[0].Texture.Frame(), Color.White, 0, AssetDirectory.Textures_UI.DragButton[0].Texture.Size() * 0.5f, dragScale, 0, 0);
+            spriteBatch.Draw(AssetDirectory.Textures.DragButton[0], position, AssetDirectory.Textures.DragButton[0].Texture.Frame(), Color.White, 0, AssetDirectory.Textures.DragButton[0].Texture.Size() * 0.5f, dragScale, 0, 0);
             if (HoveringOverDragButton || dragging)
-                spriteBatch.Draw(AssetDirectory.Textures_UI.DragButton[1], position, AssetDirectory.Textures_UI.DragButton[1].Texture.Frame(), Main.OurFavoriteColor, 0, AssetDirectory.Textures_UI.DragButton[1].Texture.Size() * 0.5f, dragScale, 0, 0);
+                spriteBatch.Draw(AssetDirectory.Textures.DragButton[1], position, AssetDirectory.Textures.DragButton[1].Texture.Frame(), Main.OurFavoriteColor, 0, AssetDirectory.Textures.DragButton[1].Texture.Size() * 0.5f, dragScale, 0, 0);
 
             if (Main.LocalPlayer.WarpPlayer().CurrentAction.MenuElements.Count > 0)
             {
                 float arrowScale = Utils.GetLerpValue(0.85f, 0.95f, fadeIn, true);
                 SpriteEffects arrowEffect = direction > 0 ^ MenuOpen ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                spriteBatch.Draw(AssetDirectory.Textures_UI.ButtonArrow[0], MenuButtonPosition, AssetDirectory.Textures_UI.ButtonArrow[0].Texture.Frame(), Color.White, 0, AssetDirectory.Textures_UI.ButtonArrow[0].Texture.Size() * 0.5f, arrowScale, arrowEffect, 0);
+                spriteBatch.Draw(AssetDirectory.Textures.ButtonArrow[0], MenuButtonPosition, AssetDirectory.Textures.ButtonArrow[0].Texture.Frame(), Color.White, 0, AssetDirectory.Textures.ButtonArrow[0].Texture.Size() * 0.5f, arrowScale, arrowEffect, 0);
                 if (HoveringOverMenuArrow)
-                    spriteBatch.Draw(AssetDirectory.Textures_UI.ButtonArrow[1], MenuButtonPosition, AssetDirectory.Textures_UI.ButtonArrow[1].Texture.Frame(), Main.OurFavoriteColor, 0, AssetDirectory.Textures_UI.ButtonArrow[1].Texture.Size() * 0.5f, arrowScale, arrowEffect, 0);
+                    spriteBatch.Draw(AssetDirectory.Textures.ButtonArrow[1], MenuButtonPosition, AssetDirectory.Textures.ButtonArrow[1].Texture.Frame(), Main.OurFavoriteColor, 0, AssetDirectory.Textures.ButtonArrow[1].Texture.Size() * 0.5f, arrowScale, arrowEffect, 0);
             }
 
             Color iconColor = Color.Lerp(Color.Magenta, Color.White, Utils.GetLerpValue(0.2f, 0.9f, fadeIn, true));
@@ -281,7 +283,7 @@ namespace SuperSpecialWarpinatorTool.Common.UI
 
                 bool hoverOrSelected = (Main.MouseScreen.Distance(actPosition) < 20 || i == player.WarpPlayer().currentActionIndex) && Usable;
 
-                Texture2D texture = AssetDirectory.Textures_UI.FlowerButton[hoverOrSelected ? 1 : 0];
+                Texture2D texture = AssetDirectory.Textures.FlowerButton[hoverOrSelected ? 1 : 0];
                 spriteBatch.Draw(texture, actPosition, texture.Frame(), Color.White, 0, texture.Size() * 0.5f, actScale, 0, 0);
                 player.WarpPlayer().actions[i].DrawIcon(spriteBatch, actPosition, iconColor, actScale);
             }

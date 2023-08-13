@@ -25,7 +25,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
-            Texture2D texture = AssetDirectory.Textures_UI.ToggleButton;
+            Texture2D texture = AssetDirectory.Textures.ToggleButton;
             Rectangle frame = texture.Frame(2, 2, condition.Value ? 1 : 0, 0);
             Rectangle outline = texture.Frame(2, 2, condition.Value ? 1 : 0, 1);
 
@@ -54,12 +54,12 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                 player.WarpInterface();
 
                 if (!oldHover)
-                    SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
             }
             if (hovering && player.WarpPlayer().mouseLeft)
             {
                 condition.Value = !condition.Value;
-                SoundEngine.PlaySound(condition.Value ? AssetDirectory.Sounds_UI.MenuTickSelect : AssetDirectory.Sounds_UI.MenuTickDeselect);
+                SoundEngine.PlaySound(condition.Value ? AssetDirectory.Sounds.MenuTickSelect : AssetDirectory.Sounds.MenuTickDeselect);
             }
 
             oldHover = hovering;

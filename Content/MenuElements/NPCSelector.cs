@@ -8,15 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace SuperSpecialWarpinatorTool.Content.MenuElements
 {
-    public class EntitySelector<T> : IMenuElement where T : Entity
+    public class NPCSelector : IMenuElement
     {
         private Ref<int> selection;
-        private T[] values;
-        private string selectionData;
+        private NPC[] values;
+        private string selectionName;
         private bool initialized;
 
         private bool dragging;
@@ -28,7 +29,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         private bool oldHover;
 
-        public EntitySelector(Ref<int> selection, ref T[] values)
+        public NPCSelector(Ref<int> selection, ref NPC[] values)
         {
             this.selection = selection;
             this.values = values;
@@ -36,14 +37,19 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public int Width => 144;
 
-        public int Height => 24;
+        public int Height => 28;
 
         public void Draw(SpriteBatch spriteBatch, Color color, Player player, Vector2 position, Vector2 mousePos, int direction)
         {
             int boxWidth = Width - 22;
+            int boxHeight = 24;
+
+            Rectangle area = new Rectangle((int)position.X, (int)position.Y, Width, boxHeight);
+            bool hovered = area.Contains(mousePos.ToPoint());
+
             Vector2 offsetPosition = position + new Vector2(direction < 0 ? -Width : 0, 0);
-            WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X, (int)offsetPosition.Y, Width, Height, color);
-            WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X + (direction < 0 ? 22 : 0), (int)offsetPosition.Y, boxWidth, Height, color);
+            WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X, (int)offsetPosition.Y, Width, boxHeight, color, hovered);
+            //WarpUtils.DrawPanel(spriteBatch, (int)offsetPosition.X + (direction < 0 ? 22 : 0), (int)offsetPosition.Y, boxWidth, Height, color, hovered);
 
             if (!WarpinatorUISystem.WarpinatorUI.MenuUsable)
                 cursorRope = null;
@@ -52,7 +58,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             {
                 if (!initialized)
                 {
-                    selectionData = "";//values[selection.Value].GetSource_FromThis().Context.ToString();
+                    selectionName = values[selection.Value].FullName;
                     initialized = true;
                 }
 
@@ -61,10 +67,10 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
                 spriteBatch.End();
                 spriteBatch.GraphicsDevice.RasterizerState = WarpUtils.OverflowHiddenRasterizerState;
-                spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((int)offsetPosition.X + 6, (int)offsetPosition.Y + 6, boxWidth - 6, Height);
+                spriteBatch.GraphicsDevice.ScissorRectangle = new Rectangle((int)offsetPosition.X + 6, (int)offsetPosition.Y + 6, boxWidth - 6, boxHeight);
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, WarpUtils.OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 
-                string text = typeof(T).Name + " " + values[selection.Value].whoAmI + ":" + selectionData;
+                string text = values[selection.Value].whoAmI + ": " + selectionName;
                 Utils.DrawBorderString(spriteBatch, text, offsetPosition + new Vector2(8 + (direction < 0 ? 22 : 0), 6), color, 0.66f);
 
                 spriteBatch.End();
@@ -75,12 +81,9 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             else
                 initialized = false;
 
-            Vector2 buttonPos = position + new Vector2((Width - 14) * direction, Height / 2);
+            Vector2 buttonPos = position + new Vector2((Width - 14) * direction, boxHeight / 2);
 
-            Rectangle area = new Rectangle((int)position.X, (int)position.Y, Width, Height);
-            bool hovered = area.Contains(mousePos.ToPoint());
-
-            Texture2D buttonTexture = AssetDirectory.Textures_UI.SelectorButton;
+            Texture2D buttonTexture = AssetDirectory.Textures.SelectorButton;
             Rectangle buttonFrame = buttonTexture.Frame(2, 2, (dragging || selection.Value > -1) ? 1 : 0, 0);
             Rectangle buttonHoverFrame = buttonTexture.Frame(2, 2, (dragging || selection.Value > -1) ? 1 : 0, 1);
 
@@ -92,7 +95,7 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
             {
                 if (cursorRope != null)
                 {
-                    Texture2D texture = AssetDirectory.Textures_UI.SelectorCursor;
+                    Texture2D texture = AssetDirectory.Textures.SelectorCursor;
                     Rectangle colorFrame = texture.Frame(2, 1, 0);
                     Rectangle highlightFrame = texture.Frame(2, 1, 1);
 
@@ -125,12 +128,14 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
 
         public void Update(Player player, Vector2 position, Vector2 mousePos, int direction)
         {
+            int boxHeight = 24;
+
             Vector2 offsetPosition = position + new Vector2(direction < 0 ? -Width : 0, 0);
 
             int boxWidth = Width - 22;
-            Vector2 buttonPos = position + new Vector2((Width - 14) * direction, Height / 2);
+            Vector2 buttonPos = position + new Vector2((Width - 14) * direction, boxHeight / 2);
 
-            Rectangle area = new Rectangle((int)offsetPosition.X, (int)offsetPosition.Y, Width, Height);
+            Rectangle area = new Rectangle((int)offsetPosition.X, (int)offsetPosition.Y, Width, boxHeight);
             bool hovered = area.Contains(mousePos.ToPoint());
             if (hovered && !dragging)
             {
@@ -138,10 +143,10 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                     dragging = true;
 
                 if (!oldHover)
-                    SoundEngine.PlaySound(AssetDirectory.Sounds_UI.MenuTick);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.MenuTick);
             }
 
-            if (dragging && dragging == oldDragging)
+            if (dragging && (dragging == oldDragging))
             {
                 player.WarpInterface();
                 player.WarpPlayer().useSpecialCursorWireHands = true;
@@ -155,13 +160,13 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                         selection.Value = values.First(n => n.active && n.Hitbox.Contains(Main.MouseWorld.ToPoint())).whoAmI;
                         dragging = false;
 
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.HookEntity);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.HookEntity);
                     }
                     else
                     {
                         selection.Value = -1;
                         dragging = false;
-                        SoundEngine.PlaySound(AssetDirectory.Sounds_UI.UnhookEntity);
+                        SoundEngine.PlaySound(AssetDirectory.Sounds.UnhookEntity);
                     }
                 }
 
@@ -169,13 +174,13 @@ namespace SuperSpecialWarpinatorTool.Content.MenuElements
                 {
                     selection.Value = -1;
                     dragging = false;
-                    SoundEngine.PlaySound(AssetDirectory.Sounds_UI.UnhookEntity);
+                    SoundEngine.PlaySound(AssetDirectory.Sounds.UnhookEntity);
                 }
             }
 
             if (selection.Value > -1 && !dragging)
             {
-                cursorPos = values[selection.Value].Center - Main.screenPosition;
+                cursorPos = values[selection.Value].Center.ToScreenPosition();
                 if (!values[selection.Value].active)
                     selection.Value = -1;
             }

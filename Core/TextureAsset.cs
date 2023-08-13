@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using Terraria.ModLoader;
 
-public struct TextureAsset
+public struct TextureAsset : IDisposable
 {
     public string Path { get; private set; }
     public Texture2D Texture { get; private set; }
@@ -19,6 +20,12 @@ public struct TextureAsset
         for (int i = 0; i < assets.Length; i++)
             assets[i] = new TextureAsset(path + (i + start));
         return assets;
+    }
+
+    public void Dispose()
+    {
+        Texture.Dispose();
+        Path = null;
     }
 
     public static implicit operator string(TextureAsset asset) => asset.Path;
